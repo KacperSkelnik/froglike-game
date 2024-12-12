@@ -6,68 +6,42 @@ Standard: Latest
 
 ## C++ Rules
 AccessModifierOffset: -2
-AlignAfterOpenBracket: Align
+AlignAfterOpenBracket: BlockIndent
 AlignConsecutiveAssignments: true
-#Clang11: AlignConsecutiveBitFields: true
 AlignConsecutiveDeclarations: true
 AlignConsecutiveMacros: true
 AlignEscapedNewlines: Left
-AlignOperands: true
-#Clang11: AlignAfterOperator
+AlignOperands: Align
 AlignTrailingComments: true
 AllowAllArgumentsOnNextLine: true
-AllowAllConstructorInitializersOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
-#Clang11: AllowShortEnumsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLambdasOnASingleLine: None
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Always
+AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: false
-AlwaysBreakAfterReturnType: None
+BreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
-AlwaysBreakTemplateDeclarations: Yes
-BinPackArguments: true
-BinPackParameters: false
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterCaseLabel: false
-  AfterClass: false
-  AfterControlStatement: Never
-  AfterEnum: false
-  AfterExternBlock: false
-  AfterFunction: false
-  AfterNamespace: false
-  AfterStruct: false
-  AfterUnion: false
-  BeforeCatch: false
-  BeforeElse: false
-  #Clang11: BeforeWhile:           false
-  #Clang11: BeforeLambdaBody:      false
-  IndentBraces: true
-  SplitEmptyFunction: true
-  SplitEmptyNamespace: true
-  SplitEmptyRecord: true
+BreakTemplateDeclarations: No
+BinPackArguments: false
+BinPackParameters: OnePerLine
+BreakBeforeBraces: Attach
 BreakBeforeBinaryOperators: None
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializers: AfterColon
 BreakInheritanceList: AfterColon
 BreakStringLiterals: true
-ColumnLimit: 160
+ColumnLimit: 120
 CompactNamespaces: true
 Cpp11BracedListStyle: true
-DeriveLineEnding: false
 DerivePointerAlignment: false
 FixNamespaceComments: true
-IncludeBlocks: Merge
-#Clang11?: IndentCaseBlocks: true
+IncludeBlocks: Regroup
 IndentCaseLabels: true
-#Clang11: IndentExternBlock: true
 IndentPPDirectives: None
 IndentWidth: 4
 IndentWrappedFunctionNames: true
-KeepEmptyLinesAtTheStartOfBlocks: false
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
 PenaltyBreakAssignment: 16
@@ -75,7 +49,7 @@ PenaltyBreakBeforeFirstCallParameter: 2
 PenaltyBreakString: 64
 PenaltyExcessCharacter: 0
 PenaltyReturnTypeOnItsOwnLine: 0
-PointerAlignment: Right
+PointerAlignment: Left
 ReflowComments: true
 SortIncludes: CaseInsensitive
 IncludeCategories:
@@ -89,7 +63,6 @@ IncludeCategories:
     Priority: -2
   - Regex: '"*\/.h"'
     Priority: 1
-
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: true
 SpaceAfterLogicalNot: false
@@ -99,7 +72,7 @@ SpaceBeforeCpp11BracedList: true
 SpaceBeforeCtorInitializerColon: false
 SpaceBeforeInheritanceColon: false
 SpaceBeforeParens: ControlStatements
-SpaceBeforeRangeBasedForLoopColon: false
+SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false
 SpaceInEmptyBlock: false
 SpaceInEmptyParentheses: false
@@ -111,6 +84,5 @@ SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 TabWidth: 4
-UseCRLF: false
 UseTab: Never
  

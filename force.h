@@ -9,9 +9,7 @@
 class Force {
   public:
     virtual ~Force() = default;
-    virtual Vector2 vector() {
-        return Vector2(0, 0);
-    };
+    virtual Vector2 vector() { return Vector2(0, 0); };
 };
 
 class Gravity final: public Force {
