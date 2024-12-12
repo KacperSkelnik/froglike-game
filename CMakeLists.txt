@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.30)
-project(game1)
+project(froglike-game)
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -15,7 +15,7 @@ function(include_dependency libName gitURL gitTag)
             GIT_SHALLOW TRUE
             GIT_PROGRESS TRUE
     )
-    
+
     FetchContent_MakeAvailable(${libName})
 endfunction()
 
@@ -29,7 +29,7 @@ else ()
     message(STATUS "Using local ${LIB1}")
 endif ()
 
-add_executable(game1 main.cpp
+add_executable(froglike_game main.cpp
         force.h
         force.cpp
         object/hero.h
@@ -41,7 +41,7 @@ add_executable(game1 main.cpp
 )
 
 # set the include directory
-target_include_directories(game1 PRIVATE ${raylib_INCLUDE_DIRS})
+target_include_directories(froglike_game PRIVATE ${raylib_INCLUDE_DIRS})
 
 # link all libraries to the project
-target_link_libraries(game1 PRIVATE ${LIB1})
+target_link_libraries(froglike_game PRIVATE ${LIB1})
