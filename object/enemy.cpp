@@ -28,10 +28,10 @@ void Enemy::move() {
     const float angle = 180 - static_cast<float>(atan2(dy, dx) * 180.0f / std::numbers::pi);
     Vector2     force = {0, 0};
     if (isGrounded()) {
-        if (0 < angle && angle <= 90) {
-            force = Basic(jumpForce, 135).vector();
-        } else if (90 < angle && angle <= 180) {
+        if (90 < angle && angle <= 270) {
             force = Basic(jumpForce, 45).vector();
+        } else if ((270 <= angle && angle <= 360) || (0 < angle && angle <= 90)) {
+            force = Basic(jumpForce, 135).vector();
         }
     } else {
         if (90 <= angle && angle < 270) {
