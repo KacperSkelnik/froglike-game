@@ -4,19 +4,19 @@
 
 #ifndef HERO_H
 #define HERO_H
-#include <raylib.h>
 #include "object.h"
+#include <raylib.h>
 
-class Hero final : public Object {
-    private:
-        float stepForce;
-        float jumpForce;
-        bool isSquatting;
+class Hero final: public Object {
+  private:
+    float stepForce;
+    float jumpForce;
+    bool  isSquatting;
 
-    public:
-        Hero(float screenWidth, float screenHeight);
-        void move() override;
-        void draw() override;
+  public:
+    Hero(float screenWidth, float screenHeight);
+    void move() override;
+    void draw() override;
 };
 
-#endif //HERO_H
+#endif // HERO_H

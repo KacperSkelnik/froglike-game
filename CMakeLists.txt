@@ -11,11 +11,11 @@ function(include_dependency libName gitURL gitTag)
     # setup the declare
     FetchContent_Declare(${libName}
             GIT_REPOSITORY ${gitURL}
-            GIT_TAG        ${gitTag}
-            GIT_SHALLOW    TRUE
-            GIT_PROGRESS   TRUE
+            GIT_TAG ${gitTag}
+            GIT_SHALLOW TRUE
+            GIT_PROGRESS TRUE
     )
-
+    
     FetchContent_MakeAvailable(${libName})
 endfunction()
 
@@ -25,9 +25,9 @@ find_package(${LIB1} QUIET)
 if (NOT ${LIB1}_FOUND)
     message(STATUS "Getting ${LIB1} from Github")
     include_dependency(${LIB1} https://github.com/raysan5/raylib.git 5.5)
-else()
+else ()
     message(STATUS "Using local ${LIB1}")
-endif()
+endif ()
 
 add_executable(game1 main.cpp
         force.h
