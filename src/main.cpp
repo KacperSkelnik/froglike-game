@@ -9,6 +9,8 @@ int main() {
 
     InitWindow(screenWidth, screenHeight, "Froglike game");
 
+    int frameCount = 0;
+
     Hero               hero    = Hero(screenWidth, screenHeight);
     std::vector<Enemy> enemies = {};
 
@@ -17,8 +19,10 @@ int main() {
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose()) {
+        frameCount++;
+
         if (enemies.empty()) {
-            enemies.emplace_back(screenWidth, screenHeight, hero.position);
+            enemies.emplace_back(screenWidth, screenHeight, hero.position, frameCount);
         }
 
         hero.move();
@@ -28,6 +32,7 @@ int main() {
 
         BeginDrawing();
 
+        DrawText(TextFormat("Frame: %i", frameCount), 10, 10, 20, BLACK);
         ClearBackground(RAYWHITE);
 
         hero.draw();
@@ -36,6 +41,8 @@ int main() {
         }
 
         EndDrawing();
+
+        frameCount = frameCount % 1000;
     }
 
     CloseWindow();

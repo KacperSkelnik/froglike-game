@@ -29,15 +29,17 @@ else ()
     message(STATUS "Using local ${LIB1}")
 endif ()
 
-add_executable(froglike_game main.cpp
-        force.h
-        force.cpp
-        object/hero.h
-        object/hero.cpp
-        object/enemy.cpp
-        object/enemy.h
-        object/object.cpp
-        object/object.h
+add_executable(froglike_game src/main.cpp
+        src/force.h
+        src/force.cpp
+        src/object/hero.h
+        src/object/hero.cpp
+        src/object/enemy.cpp
+        src/object/enemy.h
+        src/object/object.cpp
+        src/object/object.h
+        src/animation/animation.cpp
+        src/animation/animation.h
 )
 
 # set the include directory

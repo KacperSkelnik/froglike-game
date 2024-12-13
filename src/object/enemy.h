@@ -11,9 +11,10 @@ class Enemy final: public Object {
     float    stepForce;
     float    jumpForce;
     Vector2& heroPosition;
+    int&     frameCount;
 
   public:
-    Enemy(float screenWidth, float screenHeight, Vector2& heroPosition);
+    Enemy(float screenWidth, float screenHeight, Vector2& heroPosition, int& frameCount);
     void move() override;
     void draw() override;
 };
