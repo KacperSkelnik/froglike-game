@@ -18,14 +18,14 @@ AllowAllParametersOfDeclarationOnNextLine: false
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: Always
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortLambdasOnASingleLine: Empty
 AllowShortLoopsOnASingleLine: false
 BreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 BreakTemplateDeclarations: No
 BinPackArguments: false
-BinPackParameters: OnePerLine
+BinPackParameters: AlwaysOnePerLine
 BreakBeforeBraces: Attach
 BreakBeforeBinaryOperators: None
 BreakBeforeTernaryOperators: false

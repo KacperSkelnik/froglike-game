@@ -4,7 +4,7 @@
 
 #include "object.h"
 
-#include "../force.h"
+#include "../force/force.h"
 
 bool Object::isGrounded() const {
     return position.y + radius + 0.05 * radius >= screenHeight;

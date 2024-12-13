@@ -30,8 +30,8 @@ else ()
 endif ()
 
 add_executable(froglike_game src/main.cpp
-        src/force.h
-        src/force.cpp
+        src/force/force.h
+        src/force/force.cpp
         src/object/hero.h
         src/object/hero.cpp
         src/object/enemy.cpp

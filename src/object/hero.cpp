@@ -3,7 +3,7 @@
 //
 #include "hero.h"
 
-#include "../force.h"
+#include "../force/force.h"
 
 Hero::Hero(const float screenWidth, const float screenHeight): stepForce(2.0f), jumpForce(-25.0f), isSquatting(false) {
     this->radius       = 50;

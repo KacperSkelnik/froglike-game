@@ -5,7 +5,6 @@
 #ifndef HERO_H
 #define HERO_H
 #include "object.h"
-#include <raylib.h>
 
 class Hero final: public Object {
   private:

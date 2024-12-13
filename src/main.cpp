@@ -16,19 +16,24 @@ int main() {
 
     SetTargetFPS(60);
 
+    Sprite x = Animation::load_sprite("frog", DEATH, 4, std::nullopt);
+
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose()) {
         frameCount++;
 
         if (enemies.empty()) {
-            enemies.emplace_back(screenWidth, screenHeight, hero.position, frameCount);
+            enemies.emplace_back(screenWidth, screenHeight, &hero.position, &frameCount);
         }
 
         hero.move();
         for (auto& enemy : enemies) {
             enemy.move();
         }
+
+        Vector2 xx = {0, 0};
+        Animation::animate(&x, frameCount, &xx, 2);
 
         BeginDrawing();
 

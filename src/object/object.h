@@ -4,7 +4,7 @@
 
 #ifndef OBJECT_H
 #define OBJECT_H
-#include "../force.h"
+#include "../force/force.h"
 #include <raylib.h>
 
 class Object {
