@@ -25,13 +25,24 @@ typedef enum Side {
 typedef struct Sprite {
     int        frames;
     int        frames_per_second;
-    Texture2D* textures[];
+    Image*     images;
+    Texture2D* textures;
 } Sprite;
 
 class Animation {
   public:
-    static Sprite load_sprite(const char* name, Kind kind, int number, std::optional<Side> side);
-    static void   animate(const Sprite* sprite, int frameCount, const Vector2* position, float scale);
+    static Sprite load_sprite(
+        const char*         name,
+        Kind                kind,
+        int                 number,
+        std::optional<Side> side
+    );
+    static void animate(
+        const Sprite*  sprite,
+        int            frameCount,
+        const Vector2* position,
+        float          scale
+    );
 };
 
 #endif // ANIMATION_H
