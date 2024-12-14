@@ -7,7 +7,7 @@
 #include "../animation/animation.h"
 #include "object.h"
 
-class Enemy final: public Object, Animation {
+class Enemy final: public Object {
   private:
     float    stepForce;
     float    jumpForce;
@@ -15,7 +15,12 @@ class Enemy final: public Object, Animation {
     int*     frameCount;
 
   public:
-    Enemy(float screenWidth, float screenHeight, Vector2* heroPosition, int* frameCount);
+    Enemy(
+        float    screenWidth,
+        float    screenHeight,
+        Vector2* heroPosition,
+        int*     frameCount
+    );
     void move() override;
     void draw() override;
 };

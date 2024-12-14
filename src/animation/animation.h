@@ -4,6 +4,7 @@
 
 #ifndef ANIMATION_H
 #define ANIMATION_H
+#include <map>
 #include <optional>
 #include <raylib.h>
 
@@ -29,17 +30,49 @@ typedef struct Sprite {
     Texture2D* textures;
 } Sprite;
 
+typedef struct SpriteDef {
+    char*               name;
+    Kind                kind;
+    int                 number;
+    std::optional<Side> side;
+
+    bool operator==(const SpriteDef& other) const {
+        return (name == other.name && kind == other.kind && side == other.side);
+    }
+} SpriteDef;
+
+template <> struct std::hash<SpriteDef> {
+    std::size_t operator()(const SpriteDef& sprite) const noexcept {
+        const std::size_t h1 = std::hash<std::string>()(sprite.name);
+        const std::size_t h2 = std::hash<int>()(static_cast<int>(sprite.kind));
+        const std::size_t h3 = std::hash<int>()(sprite.number);
+        const std::size_t h4 = sprite.side ? std::hash<int>()(static_cast<int>(*sprite.side)) : 0;
+
+        return h1 ^ (h2 << 1) ^ (h3 << 2) ^ (h4 << 3);
+    }
+};
+
 class Animation {
-  public:
+  private:
+    std::unordered_map<SpriteDef, std::shared_ptr<Sprite>> sprites = {};
+
     static Sprite load_sprite(
         const char*         name,
         Kind                kind,
         int                 number,
         std::optional<Side> side
     );
-    static void animate(
+    static void draw(
         const Sprite*  sprite,
-        int            frameCount,
+        const int*     frameCount,
+        const Vector2* position,
+        float          scale
+    );
+
+  public:
+    void animate(
+        SpriteDef      sprite,
+        const int*     frameCount,
         const Vector2* position,
         float          scale
     );

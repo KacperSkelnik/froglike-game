@@ -8,8 +8,17 @@
 #include <iostream>
 #include <numbers>
 
-Enemy::Enemy(const float screenWidth, const float screenHeight, Vector2* heroPosition, int* frameCount):
-    stepForce(1), jumpForce(-30), heroPosition(heroPosition), frameCount(frameCount) {
+Enemy::Enemy(
+    const float screenWidth,
+    const float screenHeight,
+    Vector2*    heroPosition,
+    int*        frameCount
+):
+    stepForce(1),
+    jumpForce(-30),
+    heroPosition(heroPosition),
+    frameCount(frameCount) {
+
     this->radius       = 50;
     this->mass         = 1;
     this->gravity      = Gravity(mass).vector();

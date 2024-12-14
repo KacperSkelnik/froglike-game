@@ -4,9 +4,6 @@
 
 #include "animation.h"
 
-#include <iostream>
-#include <string>
-
 inline const char* toString(const Kind kind) {
     switch (kind) {
         case DEATH:
@@ -47,7 +44,7 @@ Sprite Animation::load_sprite(
 ) {
     Sprite sprite            = Sprite();
     sprite.frames            = number;
-    sprite.frames_per_second = 7;
+    sprite.frames_per_second = 20;
 
     auto* images   = static_cast<Image*>(malloc(sizeof(Image) * number));
     auto* textures = static_cast<Texture2D*>(malloc(sizeof(Texture2D) * number));
@@ -69,13 +66,14 @@ Sprite Animation::load_sprite(
 
     return sprite;
 }
-void Animation::animate(
+
+void Animation::draw(
     const Sprite*  sprite,
-    const int      frameCount,
+    const int*     frameCount,
     const Vector2* position,
     const float    scale
 ) {
-    int frame_number = (frameCount % (sprite->frames * sprite->frames_per_second)) / sprite->frames_per_second;
+    int frame_number = *frameCount % (sprite->frames * sprite->frames_per_second) / sprite->frames_per_second;
     if (frame_number >= sprite->frames) {
         frame_number = 0;
     }
@@ -90,4 +88,21 @@ void Animation::animate(
         WHITE)
     ;
     // clang-format on
+}
+
+void Animation::animate(
+    SpriteDef      sprite,
+    const int*     frameCount,
+    const Vector2* position,
+    const float    scale
+) {
+    if (this->sprites.contains(sprite)) {
+        const std::shared_ptr<Sprite> loaded = this->sprites[sprite];
+        draw(loaded.get(), frameCount, position, scale);
+    } else {
+        Sprite                  loaded  = load_sprite(sprite.name, sprite.kind, sprite.number, sprite.side);
+        std::shared_ptr<Sprite> pointer = std::make_shared<Sprite>(loaded);
+        this->sprites.emplace(sprite, pointer);
+        draw(pointer.get(), frameCount, position, scale);
+    }
 }

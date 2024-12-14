@@ -14,14 +14,17 @@ int main() {
     Hero               hero    = Hero(screenWidth, screenHeight);
     std::vector<Enemy> enemies = {};
 
-    SetTargetFPS(60);
+    Animation x = Animation();
 
-    Sprite x = Animation::load_sprite("frog", DEATH, 4, std::nullopt);
+    SetTargetFPS(60);
 
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose()) {
         frameCount++;
+
+        auto p = Vector2(0, 0);
+        x.animate(SpriteDef("frog", LAND, 2, LEFT), &frameCount, &p, 8);
 
         if (enemies.empty()) {
             enemies.emplace_back(screenWidth, screenHeight, &hero.position, &frameCount);
@@ -31,9 +34,6 @@ int main() {
         for (auto& enemy : enemies) {
             enemy.move();
         }
-
-        Vector2 xx = {0, 0};
-        Animation::animate(&x, frameCount, &xx, 2);
 
         BeginDrawing();
 
