@@ -5,6 +5,10 @@
 
 #include "../force/force.h"
 
+SpriteDef Hero::getSprite() {
+    return SpriteDef {type, TURN, LEFT};
+}
+
 Hero::Hero(
     Animation*       animation,
     const ObjectType type,

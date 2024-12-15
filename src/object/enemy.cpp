@@ -37,7 +37,7 @@ Enemy::Enemy(
 void Enemy::move() {
     if (!isGrounded() || *frameCount % 100 == 0) {
         Vector2 force = {0, 0};
-        if (isGrounded()) {
+        if (isGrounded() && framesToLand == 0 && framesToTurn == 0) {
             const float dx    = position.x - heroPosition->x;
             const float dy    = position.y - heroPosition->y;
             const float angle = 180 - static_cast<float>(atan2(dy, dx) * 180.0f / std::numbers::pi);
@@ -56,6 +56,34 @@ void Enemy::move() {
         resultantForce.x += force.x;
         resultantForce.y += force.y;
     }
+}
+
+SpriteDef Enemy::getSprite() {
+    if (isGrounded()) {
+        if (framesToLand > 0) {
+            framesToLand--;
+            return SpriteDef {type, LAND, side};
+        }
+        if (framesToTurn > 0) {
+            framesToTurn--;
+            return SpriteDef {type, TURN, NONE};
+        }
+
+        const float dx = position.x - heroPosition->x;
+        if (dx <= 0) side = RIGHT;
+        else side = LEFT;
+        if (previousSide != side) {
+            previousSide = side;
+            framesToTurn = initialFramesToTurn;
+            return SpriteDef {type, TURN, NONE};
+        }
+        return SpriteDef {type, IDLE, side};
+    }
+    if (velocity.y <= 0) {
+        framesToLand = initialFramesToLand;
+        return SpriteDef {type, JUMP, side};
+    }
+    return SpriteDef {type, FALL, side};
 }
 
 void Enemy::draw() {

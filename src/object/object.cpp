@@ -65,10 +65,6 @@ void Object::restartForces() {
     resultantForce = gravity;
 }
 
-SpriteDef Object::getSprite() const {
-    return SpriteDef {2, type, LAND, LEFT};
-}
-
 Object::Object(
     Animation*       animation,
     const ObjectType type,

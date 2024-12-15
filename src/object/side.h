@@ -16,9 +16,9 @@ inline const char* toString(const ObjectSide side) {
         case NONE:
             return "";
         case LEFT:
-            return "left";
+            return "_left";
         case RIGHT:
-            return "right";
+            return "_right";
         default:
             return "[Unknown ObjectSide]";
     }

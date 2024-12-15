@@ -10,14 +10,15 @@
 #include <raylib.h>
 
 class Object {
-  private:
+  protected:
     ObjectType type;
 
-  protected:
     float radius;
     float mass;
     float screenWidth;
     float screenHeight;
+
+    ObjectSide previousSide = NONE;
 
     Vector2 gravity = Gravity(mass).vector();
     Vector2 resultantForce {};
@@ -25,15 +26,15 @@ class Object {
 
     Animation* animation;
 
-    [[nodiscard]] bool      isGrounded() const;
-    void                    keepGrounded();
-    void                    pushAwayFromTheRoof();
-    void                    pushAwayFromTheLeftWall();
-    void                    pushAwayFromTheRightWall();
-    void                    applyAirResistance();
-    void                    applyForces();
-    void                    restartForces();
-    [[nodiscard]] SpriteDef getSprite() const;
+    [[nodiscard]] bool isGrounded() const;
+    void               keepGrounded();
+    void               pushAwayFromTheRoof();
+    void               pushAwayFromTheLeftWall();
+    void               pushAwayFromTheRightWall();
+    void               applyAirResistance();
+    void               applyForces();
+    void               restartForces();
+    virtual SpriteDef  getSprite() = 0;
 
   public:
     explicit Object(

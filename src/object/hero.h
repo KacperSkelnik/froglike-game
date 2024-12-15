@@ -12,6 +12,8 @@ class Hero final: public Object {
     float jumpForce;
     bool  isSquatting;
 
+    SpriteDef getSprite() override;
+
   public:
     Hero(
         Animation* animation,

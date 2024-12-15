@@ -30,7 +30,7 @@ inline const char* toString(const ObjectStatus status) {
         case LAND:
             return "land";
         case TURN:
-            return "idle";
+            return "turn";
         default:
             return "[Unknown ObjectStatus]";
     }

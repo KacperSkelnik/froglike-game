@@ -14,6 +14,15 @@ class Enemy final: public Object {
     Vector2* heroPosition;
     int*     frameCount;
 
+    ObjectSide side = RIGHT;
+
+    const int initialFramesToLand = 8;
+    int       framesToLand        = 0;
+    const int initialFramesToTurn = 32;
+    int       framesToTurn        = 0;
+
+    SpriteDef getSprite() override;
+
   public:
     Enemy(
         Animation* animation,

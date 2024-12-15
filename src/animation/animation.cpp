@@ -101,7 +101,13 @@ void Animation::animate(
         const std::shared_ptr<Sprite> loaded = this->sprites[sprite];
         draw(loaded.get(), frameCount, position, scale);
     } else {
-        Sprite loaded = loadSprite(sprite.directory, sprite.file).value_or(loadSpriteUnsafe("error", "error", 1));
+        Sprite                loaded;
+        std::optional<Sprite> maybeLoaded = loadSprite(sprite.directory, sprite.file);
+        if (maybeLoaded.has_value()) loaded = maybeLoaded.value();
+        else {
+            std::cout << "Cannot load: " << sprite.directory << "/" << sprite.file << std::endl;
+            loaded = loadSpriteUnsafe("error", "error", 1);
+        }
         std::shared_ptr<Sprite> pointer = std::make_shared<Sprite>(loaded);
         this->sprites.emplace(sprite, pointer);
         draw(pointer.get(), frameCount, position, scale);
