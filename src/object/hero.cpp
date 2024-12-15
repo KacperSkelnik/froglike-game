@@ -5,13 +5,26 @@
 
 #include "../force/force.h"
 
-Hero::Hero(const float screenWidth, const float screenHeight): stepForce(2.0f), jumpForce(-25.0f), isSquatting(false) {
-    this->radius       = 50;
-    this->mass         = 1;
-    this->gravity      = Gravity(mass).vector();
-    this->screenWidth  = screenWidth;
-    this->screenHeight = screenHeight;
-    this->position     = Vector2(screenWidth / 2, screenHeight - radius);
+Hero::Hero(
+    Animation*       animation,
+    const ObjectType type,
+    const float      screenWidth,
+    const float      screenHeight
+):
+    Object(
+        animation,
+        type,
+        50,
+        1,
+        screenWidth,
+        screenHeight
+    ),
+    stepForce(2.0f),
+    jumpForce(-25.0f),
+    isSquatting(false) {
+
+    this->gravity  = Gravity(mass).vector();
+    this->position = Vector2(screenWidth / 2, screenHeight - radius);
 }
 
 void Hero::move() {

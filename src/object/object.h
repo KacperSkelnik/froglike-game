@@ -4,19 +4,25 @@
 
 #ifndef OBJECT_H
 #define OBJECT_H
+#include "../animation/animation.h"
 #include "../force/force.h"
+#include "type.h"
 #include <raylib.h>
 
 class Object {
   protected:
-    float radius       = 0;
-    float mass         = 0;
-    float screenWidth  = 0;
-    float screenHeight = 0;
+    ObjectType type;
+
+    float radius;
+    float mass;
+    float screenWidth;
+    float screenHeight;
 
     Vector2 gravity = Gravity(mass).vector();
     Vector2 resultantForce {};
     Vector2 velocity {};
+
+    Animation* animation;
 
     [[nodiscard]] bool isGrounded() const;
     void               keepGrounded();
@@ -28,6 +34,14 @@ class Object {
     void               restartForces();
 
   public:
+    explicit Object(
+        Animation* animation,
+        ObjectType type,
+        float      radius,
+        float      mass,
+        float      screenWidth,
+        float      screenHeight
+    );
     virtual ~Object() = default;
     Vector2 position {};
 

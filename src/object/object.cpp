@@ -64,3 +64,18 @@ void Object::applyForces() {
 void Object::restartForces() {
     resultantForce = gravity;
 }
+
+Object::Object(
+    Animation*       animation,
+    const ObjectType type,
+    const float      radius,
+    const float      mass,
+    const float      screenWidth,
+    const float      screenHeight
+):
+    type(type),
+    radius(radius),
+    mass(mass),
+    screenWidth(screenWidth),
+    screenHeight(screenHeight),
+    animation(animation) {}

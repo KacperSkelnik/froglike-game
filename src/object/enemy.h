@@ -16,10 +16,12 @@ class Enemy final: public Object {
 
   public:
     Enemy(
-        float    screenWidth,
-        float    screenHeight,
-        Vector2* heroPosition,
-        int*     frameCount
+        Animation* animation,
+        ObjectType type,
+        float      screenWidth,
+        float      screenHeight,
+        Vector2*   heroPosition,
+        int*       frameCount
     );
     void move() override;
     void draw() override;

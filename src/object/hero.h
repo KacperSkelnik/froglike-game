@@ -13,7 +13,12 @@ class Hero final: public Object {
     bool  isSquatting;
 
   public:
-    Hero(float screenWidth, float screenHeight);
+    Hero(
+        Animation* animation,
+        ObjectType type,
+        float      screenWidth,
+        float      screenHeight
+    );
     void move() override;
     void draw() override;
 };

@@ -9,21 +9,25 @@
 #include <numbers>
 
 Enemy::Enemy(
-    const float screenWidth,
-    const float screenHeight,
-    Vector2*    heroPosition,
-    int*        frameCount
+    Animation*       animation,
+    const ObjectType type,
+    const float      screenWidth,
+    const float      screenHeight,
+    Vector2*         heroPosition,
+    int*             frameCount
 ):
+    Object(
+        animation,
+        type,
+        50,
+        1,
+        screenWidth,
+        screenHeight
+    ),
     stepForce(1),
     jumpForce(-30),
     heroPosition(heroPosition),
     frameCount(frameCount) {
-
-    this->radius       = 50;
-    this->mass         = 1;
-    this->gravity      = Gravity(mass).vector();
-    this->screenWidth  = screenWidth;
-    this->screenHeight = screenHeight;
 
     const auto initialX = static_cast<float>(GetRandomValue(static_cast<int>(radius), static_cast<int>(screenWidth - radius)));
     const float initialY = screenHeight - radius;
@@ -56,6 +60,6 @@ void Enemy::move() {
 
 void Enemy::draw() {
     applyForces();
-    DrawCircleV(position, radius, BROWN);
+    animation->animate(SpriteDef(2, FROG, LAND, LEFT), frameCount, &position, 8);
     restartForces();
 }

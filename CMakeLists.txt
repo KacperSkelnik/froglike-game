@@ -40,6 +40,10 @@ add_executable(froglike_game src/main.cpp
         src/object/object.h
         src/animation/animation.cpp
         src/animation/animation.h
+        src/object/status.h
+        src/object/type.h
+        src/object/side.h
+        src/animation/sprite.h
 )
 
 # set the include directory

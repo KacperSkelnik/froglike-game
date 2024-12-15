@@ -11,10 +11,9 @@ int main() {
 
     int frameCount = 0;
 
-    Hero               hero    = Hero(screenWidth, screenHeight);
-    std::vector<Enemy> enemies = {};
-
-    Animation x = Animation();
+    Animation          animation = Animation();
+    Hero               hero      = Hero(&animation, HERO, screenWidth, screenHeight);
+    std::vector<Enemy> enemies   = {};
 
     SetTargetFPS(60);
 
@@ -23,11 +22,8 @@ int main() {
     while (!WindowShouldClose()) {
         frameCount++;
 
-        auto p = Vector2(0, 0);
-        x.animate(SpriteDef("frog", LAND, 2, LEFT), &frameCount, &p, 8);
-
         if (enemies.empty()) {
-            enemies.emplace_back(screenWidth, screenHeight, &hero.position, &frameCount);
+            enemies.emplace_back(&animation, FROG, screenWidth, screenHeight, &hero.position, &frameCount);
         }
 
         hero.move();
