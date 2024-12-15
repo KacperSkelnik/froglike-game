@@ -13,9 +13,18 @@ class Animation {
     const char*                                            basePath = "../assets/animations";
     std::unordered_map<SpriteDef, std::shared_ptr<Sprite>> sprites  = {};
 
-    Sprite loadSprite(
-        const char* path,
-        int         number
+    int findNumberOfFrames(
+        const char* directory,
+        const char* file
+    ) const;
+    Sprite loadSpriteUnsafe(
+        const char* directory,
+        const char* file,
+        int         framesNumber
+    ) const;
+    std::optional<Sprite> loadSprite(
+        const char* directory,
+        const char* file
     ) const;
     static void draw(
         const Sprite*  sprite,

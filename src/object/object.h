@@ -10,9 +10,10 @@
 #include <raylib.h>
 
 class Object {
-  protected:
+  private:
     ObjectType type;
 
+  protected:
     float radius;
     float mass;
     float screenWidth;
@@ -24,14 +25,15 @@ class Object {
 
     Animation* animation;
 
-    [[nodiscard]] bool isGrounded() const;
-    void               keepGrounded();
-    void               pushAwayFromTheRoof();
-    void               pushAwayFromTheLeftWall();
-    void               pushAwayFromTheRightWall();
-    void               applyAirResistance();
-    void               applyForces();
-    void               restartForces();
+    [[nodiscard]] bool      isGrounded() const;
+    void                    keepGrounded();
+    void                    pushAwayFromTheRoof();
+    void                    pushAwayFromTheLeftWall();
+    void                    pushAwayFromTheRightWall();
+    void                    applyAirResistance();
+    void                    applyForces();
+    void                    restartForces();
+    [[nodiscard]] SpriteDef getSprite() const;
 
   public:
     explicit Object(

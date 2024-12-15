@@ -4,22 +4,51 @@
 
 #include "animation.h"
 
-#include <ranges>
+#include <filesystem>
+#include <regex>
+namespace fs = std::filesystem;
 
-Sprite Animation::loadSprite(
-    const char* path,
-    const int   number
+int Animation::findNumberOfFrames(
+    const char* directory,
+    const char* file
+) const {
+    int  count = 0;
+    char folder[256];
+    snprintf(folder, 256, "%s/%s", basePath, directory);
+
+    if (!fs::exists(folder) || !fs::is_directory(folder)) {
+        return count;
+    }
+
+    const std::string filePattern = file + std::string("_\\d.png");
+    const std::regex  pattern(filePattern);
+
+    for (const auto& entry : fs::directory_iterator(folder)) {
+        if (entry.is_regular_file()) {
+            const std::string filename = entry.path().filename().string();
+            if (std::regex_match(filename, pattern)) {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+Sprite Animation::loadSpriteUnsafe(
+    const char* directory,
+    const char* file,
+    const int   framesNumber
 ) const {
     Sprite sprite          = Sprite();
-    sprite.framesNumber    = number;
+    sprite.framesNumber    = framesNumber;
     sprite.framesPerSecond = 20;
 
-    auto* images   = static_cast<Image*>(malloc(sizeof(Image) * number));
-    auto* textures = static_cast<Texture2D*>(malloc(sizeof(Texture2D) * number));
+    auto* images   = static_cast<Image*>(malloc(sizeof(Image) * framesNumber));
+    auto* textures = static_cast<Texture2D*>(malloc(sizeof(Texture2D) * framesNumber));
 
-    for (int i = 0; i < number; i++) {
+    for (int i = 0; i < framesNumber; i++) {
         char fullPath[256];
-        snprintf(fullPath, 256, "%s/%s_%d.png", basePath, path, i);
+        snprintf(fullPath, 256, "%s/%s/%s_%d.png", basePath, directory, file, i);
         images[i]   = LoadImage(fullPath);
         textures[i] = LoadTextureFromImage(images[i]);
     }
@@ -28,6 +57,15 @@ Sprite Animation::loadSprite(
     sprite.textures = textures;
 
     return sprite;
+}
+
+std::optional<Sprite> Animation::loadSprite(
+    const char* directory,
+    const char* file
+) const {
+    int framesNumber = findNumberOfFrames(directory, file);
+    if (framesNumber > 0) return loadSpriteUnsafe(directory, file, framesNumber);
+    return std::nullopt;
 }
 
 void Animation::draw(
@@ -63,7 +101,7 @@ void Animation::animate(
         const std::shared_ptr<Sprite> loaded = this->sprites[sprite];
         draw(loaded.get(), frameCount, position, scale);
     } else {
-        Sprite                  loaded  = loadSprite(sprite.path, sprite.framesNumber);
+        Sprite loaded = loadSprite(sprite.directory, sprite.file).value_or(loadSpriteUnsafe("error", "error", 1));
         std::shared_ptr<Sprite> pointer = std::make_shared<Sprite>(loaded);
         this->sprites.emplace(sprite, pointer);
         draw(pointer.get(), frameCount, position, scale);

@@ -60,6 +60,6 @@ void Enemy::move() {
 
 void Enemy::draw() {
     applyForces();
-    animation->animate(SpriteDef(2, FROG, LAND, LEFT), frameCount, &position, 8);
+    animation->animate(getSprite(), frameCount, &position, 6);
     restartForces();
 }
