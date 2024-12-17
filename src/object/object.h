@@ -17,7 +17,6 @@ class Object {
     float mass;
     float screenWidth;
     float screenHeight;
-    int*  frameCount;
 
     ObjectSide previousSide = NONE;
 
@@ -44,8 +43,7 @@ class Object {
         float      radius,
         float      mass,
         float      screenWidth,
-        float      screenHeight,
-        int*       frameCount
+        float      screenHeight
     );
     virtual ~Object() = default;
     Vector2 position {};

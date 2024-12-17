@@ -13,7 +13,7 @@ class Hero final: public Object {
     bool  isSquatting = false;
     bool  isWalking   = false;
 
-    const int initialFramesToLand = 8;
+    const int initialFramesToLand = 16;
     int       framesToLand        = 0;
     const int initialFramesToTurn = 8;
     int       framesToTurn        = 0;
@@ -28,8 +28,7 @@ class Hero final: public Object {
         Animation* animation,
         ObjectType type,
         float      screenWidth,
-        float      screenHeight,
-        int*       frameCount
+        float      screenHeight
     );
     void move() override;
 };

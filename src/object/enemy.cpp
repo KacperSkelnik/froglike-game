@@ -13,8 +13,7 @@ Enemy::Enemy(
     const ObjectType type,
     const float      screenWidth,
     const float      screenHeight,
-    Vector2*         heroPosition,
-    int*             frameCount
+    Vector2*         heroPosition
 ):
     Object(
         animation,
@@ -22,8 +21,7 @@ Enemy::Enemy(
         50,
         1,
         screenWidth,
-        screenHeight,
-        frameCount
+        screenHeight
     ),
     stepForce(1),
     jumpForce(-30),
@@ -35,7 +33,8 @@ Enemy::Enemy(
 }
 
 void Enemy::move() {
-    if (!isGrounded() || *frameCount % 100 == 0) {
+    frameCount++;
+    if (!isGrounded() || frameCount % 100 == 0) {
         Vector2 force = {0, 0};
         if (isGrounded() && framesToLand == 0 && framesToTurn == 0) {
             const float dx    = position.x - heroPosition->x;

@@ -8,6 +8,15 @@
 #include <regex>
 namespace fs = std::filesystem;
 
+Animation::Animation(
+    const int*  frameCount,
+    const float spreadsPixels,
+    const float scale
+):
+    frameCount(frameCount),
+    spreadsPixels(spreadsPixels),
+    scale(scale) {}
+
 int Animation::findNumberOfFrames(
     const char* directory,
     const char* file
@@ -34,6 +43,7 @@ int Animation::findNumberOfFrames(
 
     return count;
 }
+
 Sprite Animation::loadSpriteUnsafe(
     const char* directory,
     const char* file,
@@ -71,19 +81,29 @@ std::optional<Sprite> Animation::loadSprite(
 void Animation::draw(
     const Sprite*  sprite,
     const int*     frameCount,
-    const Vector2* position,
-    const float    scale
-) {
+    const Vector2* position
+) const {
     int frame_number = *frameCount % (sprite->framesNumber * sprite->framesPerSecond) / sprite->framesPerSecond;
     if (frame_number >= sprite->framesNumber) {
         frame_number = 0;
     }
 
+    const float positionShift = 3 * spreadsPixels / 2;
     // clang-format off
     DrawTexturePro(
         sprite->textures[frame_number],
-        Rectangle {0, 0, 32, 32},
-        Rectangle {position->x - 100, position->y - 100, 32 * scale, 32 * scale},
+        Rectangle {
+            0,
+            0,
+            spreadsPixels,
+            spreadsPixels
+        },
+        Rectangle {
+            position->x - positionShift,
+            position->y - positionShift,
+            spreadsPixels * scale,
+            spreadsPixels * scale
+        },
         Vector2 {0, 0},
         0,
         WHITE)
@@ -93,13 +113,11 @@ void Animation::draw(
 
 void Animation::animate(
     SpriteDef      sprite,
-    const int*     frameCount,
-    const Vector2* position,
-    const float    scale
+    const Vector2* position
 ) {
     if (this->sprites.contains(sprite)) {
         const std::shared_ptr<Sprite> loaded = this->sprites[sprite];
-        draw(loaded.get(), frameCount, position, scale);
+        draw(loaded.get(), frameCount, position);
     } else {
         Sprite                loaded;
         std::optional<Sprite> maybeLoaded = loadSprite(sprite.directory, sprite.file);
@@ -110,6 +128,6 @@ void Animation::animate(
         }
         std::shared_ptr<Sprite> pointer = std::make_shared<Sprite>(loaded);
         this->sprites.emplace(sprite, pointer);
-        draw(pointer.get(), frameCount, position, scale);
+        draw(pointer.get(), frameCount, position);
     }
 }

@@ -9,6 +9,7 @@
 
 class Enemy final: public Object {
   private:
+    int      frameCount = 0;
     float    stepForce;
     float    jumpForce;
     Vector2* heroPosition;
@@ -28,8 +29,7 @@ class Enemy final: public Object {
         ObjectType type,
         float      screenWidth,
         float      screenHeight,
-        Vector2*   heroPosition,
-        int*       frameCount
+        Vector2*   heroPosition
     );
     void move() override;
 };

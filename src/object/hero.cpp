@@ -9,8 +9,7 @@ Hero::Hero(
     Animation*       animation,
     const ObjectType type,
     const float      screenWidth,
-    const float      screenHeight,
-    int*             frameCount
+    const float      screenHeight
 ):
     Object(
         animation,
@@ -18,8 +17,7 @@ Hero::Hero(
         50,
         1,
         screenWidth,
-        screenHeight,
-        frameCount
+        screenHeight
     ),
     stepForce(2.0f),
     jumpForce(-25.0f) {
@@ -91,8 +89,8 @@ SpriteDef Hero::getSprite() {
             framesToTurn = initialFramesToTurn;
             return SpriteDef {type, TURN, side};
         }
-        if (isSquatting) return SpriteDef {type, SQUATTING, side};
-        if (isWalking) return SpriteDef {type, WALKING, side};
+        if (isSquatting) return SpriteDef {type, SQUAT, side};
+        if (isWalking) return SpriteDef {type, WALK, side};
     } else {
         if (velocity.y <= 0) {
             framesToLand = initialFramesToLand;

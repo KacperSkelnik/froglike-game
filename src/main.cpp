@@ -11,8 +11,8 @@ int main() {
 
     int frameCount = 0;
 
-    Animation          animation = Animation();
-    Hero               hero      = Hero(&animation, HERO, screenWidth, screenHeight, &frameCount);
+    Animation          animation = Animation(&frameCount, 32, 3);
+    Hero               hero      = Hero(&animation, HERO, screenWidth, screenHeight);
     std::vector<Enemy> enemies   = {};
 
     SetTargetFPS(60);
@@ -23,7 +23,7 @@ int main() {
         frameCount++;
 
         if (enemies.empty()) {
-            enemies.emplace_back(&animation, FROG, screenWidth, screenHeight, &hero.position, &frameCount);
+            enemies.emplace_back(&animation, FROG, screenWidth, screenHeight, &hero.position);
         }
 
         hero.move();
