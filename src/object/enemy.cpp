@@ -22,12 +22,12 @@ Enemy::Enemy(
         50,
         1,
         screenWidth,
-        screenHeight
+        screenHeight,
+        frameCount
     ),
     stepForce(1),
     jumpForce(-30),
-    heroPosition(heroPosition),
-    frameCount(frameCount) {
+    heroPosition(heroPosition) {
 
     const auto initialX = static_cast<float>(GetRandomValue(static_cast<int>(radius), static_cast<int>(screenWidth - radius)));
     const float initialY = screenHeight - radius;
@@ -84,10 +84,4 @@ SpriteDef Enemy::getSprite() {
         return SpriteDef {type, JUMP, side};
     }
     return SpriteDef {type, FALL, side};
-}
-
-void Enemy::draw() {
-    applyForces();
-    animation->animate(getSprite(), frameCount, &position, 6);
-    restartForces();
 }

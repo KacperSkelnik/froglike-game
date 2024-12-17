@@ -71,11 +71,19 @@ Object::Object(
     const float      radius,
     const float      mass,
     const float      screenWidth,
-    const float      screenHeight
+    const float      screenHeight,
+    int*             frameCount
 ):
     type(type),
     radius(radius),
     mass(mass),
     screenWidth(screenWidth),
     screenHeight(screenHeight),
+    frameCount(frameCount),
     animation(animation) {}
+
+void Object::draw() {
+    applyForces();
+    animation->animate(getSprite(), frameCount, &position, 6);
+    restartForces();
+}

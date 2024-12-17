@@ -10,8 +10,9 @@
 
 class Animation {
   private:
-    const char*                                            basePath = "../assets/animations";
-    std::unordered_map<SpriteDef, std::shared_ptr<Sprite>> sprites  = {};
+    const int                                              framesPerSecond = 10;
+    const char*                                            basePath        = "../assets/animations";
+    std::unordered_map<SpriteDef, std::shared_ptr<Sprite>> sprites         = {};
 
     int findNumberOfFrames(
         const char* directory,

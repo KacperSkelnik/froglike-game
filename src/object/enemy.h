@@ -12,7 +12,6 @@ class Enemy final: public Object {
     float    stepForce;
     float    jumpForce;
     Vector2* heroPosition;
-    int*     frameCount;
 
     ObjectSide side = RIGHT;
 
@@ -33,7 +32,6 @@ class Enemy final: public Object {
         int*       frameCount
     );
     void move() override;
-    void draw() override;
 };
 
 #endif // ENEMY_H

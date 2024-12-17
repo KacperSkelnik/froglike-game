@@ -41,7 +41,7 @@ Sprite Animation::loadSpriteUnsafe(
 ) const {
     Sprite sprite          = Sprite();
     sprite.framesNumber    = framesNumber;
-    sprite.framesPerSecond = 20;
+    sprite.framesPerSecond = framesPerSecond;
 
     auto* images   = static_cast<Image*>(malloc(sizeof(Image) * framesNumber));
     auto* textures = static_cast<Texture2D*>(malloc(sizeof(Texture2D) * framesNumber));

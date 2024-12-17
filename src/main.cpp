@@ -12,7 +12,7 @@ int main() {
     int frameCount = 0;
 
     Animation          animation = Animation();
-    Hero               hero      = Hero(&animation, HERO, screenWidth, screenHeight);
+    Hero               hero      = Hero(&animation, HERO, screenWidth, screenHeight, &frameCount);
     std::vector<Enemy> enemies   = {};
 
     SetTargetFPS(60);

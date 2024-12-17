@@ -10,7 +10,16 @@ class Hero final: public Object {
   private:
     float stepForce;
     float jumpForce;
-    bool  isSquatting;
+    bool  isSquatting = false;
+    bool  isWalking   = false;
+
+    const int initialFramesToLand = 8;
+    int       framesToLand        = 0;
+    const int initialFramesToTurn = 8;
+    int       framesToTurn        = 0;
+
+    ObjectSide previousSide = RIGHT;
+    ObjectSide side         = RIGHT;
 
     SpriteDef getSprite() override;
 
@@ -19,10 +28,10 @@ class Hero final: public Object {
         Animation* animation,
         ObjectType type,
         float      screenWidth,
-        float      screenHeight
+        float      screenHeight,
+        int*       frameCount
     );
     void move() override;
-    void draw() override;
 };
 
 #endif // HERO_H
