@@ -13,7 +13,8 @@ class Object {
   protected:
     ObjectType type;
 
-    float radius;
+    float height;
+    float width;
     float mass;
     float screenWidth;
     float screenHeight;
@@ -40,7 +41,8 @@ class Object {
     explicit Object(
         Animation* animation,
         ObjectType type,
-        float      radius,
+        float      width,
+        float      height,
         float      mass,
         float      screenWidth,
         float      screenHeight

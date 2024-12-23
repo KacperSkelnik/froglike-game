@@ -16,7 +16,7 @@ class Enemy final: public Object {
 
     ObjectSide side = RIGHT;
 
-    const int initialFramesToLand = 8;
+    const int initialFramesToLand = 16;
     int       framesToLand        = 0;
     const int initialFramesToTurn = 32;
     int       framesToTurn        = 0;
@@ -27,6 +27,8 @@ class Enemy final: public Object {
     Enemy(
         Animation* animation,
         ObjectType type,
+        float      width,
+        float      height,
         float      screenWidth,
         float      screenHeight,
         Vector2*   heroPosition

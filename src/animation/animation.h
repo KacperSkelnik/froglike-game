@@ -14,8 +14,8 @@ class Animation {
     std::unordered_map<SpriteDef, std::shared_ptr<Sprite>> sprites  = {};
     const int*                                             frameCount;
     const int                                              framesPerSecond = 10;
-    float                                                  spreadsPixels;
-    float                                                  scale;
+    float                                                  desireWidth;
+    float                                                  desireHeight;
 
     int findNumberOfFrames(
         const char* directory,
@@ -39,8 +39,8 @@ class Animation {
   public:
     Animation(
         const int* frameCount,
-        float      spreadsPixels,
-        float      scale
+        float      desireWidth,
+        float      desireHeight
     );
     void animate(
         SpriteDef      sprite,

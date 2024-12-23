@@ -6,15 +6,17 @@
 #include "../force/force.h"
 
 Hero::Hero(
-    Animation*       animation,
-    const ObjectType type,
-    const float      screenWidth,
-    const float      screenHeight
+    Animation*  animation,
+    const float width,
+    const float height,
+    const float screenWidth,
+    const float screenHeight
 ):
     Object(
         animation,
-        type,
-        50,
+        ObjectType::HERO,
+        width,
+        height,
         1,
         screenWidth,
         screenHeight
@@ -23,11 +25,11 @@ Hero::Hero(
     jumpForce(-25.0f) {
 
     this->gravity  = Gravity(mass).vector();
-    this->position = Vector2(screenWidth / 2, screenHeight - radius);
+    this->position = Vector2(screenWidth / 2, screenHeight - height);
 }
 
 void Hero::move() {
-    auto leftRightMovement = [](Hero* hero, bool isGrounded) -> void {
+    auto leftRightMovement = [](Hero* hero, const bool isGrounded) -> void {
         if (IsKeyDown(KEY_RIGHT)) {
             auto [x, _] = Basic(hero->stepForce, 0).vector();
             hero->resultantForce.x += x;
@@ -51,14 +53,8 @@ void Hero::move() {
         }
 
         // squatting
-        if (IsKeyDown(KEY_DOWN) && !isSquatting) {
-            position.y  = screenHeight - radius;
-            isSquatting = true;
-        }
-        if (!IsKeyDown(KEY_DOWN) && isSquatting) {
-            position.y  = screenHeight - radius;
-            isSquatting = false;
-        }
+        if (IsKeyDown(KEY_DOWN) && !isSquatting) isSquatting = true;
+        if (!IsKeyDown(KEY_DOWN) && isSquatting) isSquatting = false;
 
         // left/right
         if (!isSquatting) {

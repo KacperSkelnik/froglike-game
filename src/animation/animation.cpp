@@ -10,12 +10,12 @@ namespace fs = std::filesystem;
 
 Animation::Animation(
     const int*  frameCount,
-    const float spreadsPixels,
-    const float scale
+    const float desireWidth,
+    const float desireHeight
 ):
     frameCount(frameCount),
-    spreadsPixels(spreadsPixels),
-    scale(scale) {}
+    desireWidth(desireWidth),
+    desireHeight(desireHeight) {}
 
 int Animation::findNumberOfFrames(
     const char* directory,
@@ -88,21 +88,22 @@ void Animation::draw(
         frame_number = 0;
     }
 
-    const float positionShift = 3 * spreadsPixels / 2;
+    const auto width  = static_cast<float>(sprite->textures[frame_number].width);
+    const auto height = static_cast<float>(sprite->textures[frame_number].height);
     // clang-format off
     DrawTexturePro(
         sprite->textures[frame_number],
         Rectangle {
             0,
             0,
-            spreadsPixels,
-            spreadsPixels
+            width,
+            height
         },
         Rectangle {
-            position->x - positionShift,
-            position->y - positionShift,
-            spreadsPixels * scale,
-            spreadsPixels * scale
+            position->x,
+            position->y,
+            desireWidth,
+            desireHeight
         },
         Vector2 {0, 0},
         0,

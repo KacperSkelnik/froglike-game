@@ -4,16 +4,21 @@
 #include <vector>
 
 int main() {
-    constexpr int screenWidth  = 1600;
-    constexpr int screenHeight = 900;
+    constexpr int screenWidth  = 1280;
+    constexpr int screenHeight = 720;
+    constexpr int heroWidth    = 96;
+    constexpr int heroHeight   = 96;
+    constexpr int frogWidth    = 80;
+    constexpr int frogHeight   = 40;
 
     InitWindow(screenWidth, screenHeight, "Froglike game");
 
     int frameCount = 0;
 
-    Animation          animation = Animation(&frameCount, 32, 3);
-    Hero               hero      = Hero(&animation, HERO, screenWidth, screenHeight);
-    std::vector<Enemy> enemies   = {};
+    Animation          heroAnimation = Animation(&frameCount, heroWidth, heroHeight);
+    Animation          frogAnimation = Animation(&frameCount, frogWidth, frogHeight);
+    Hero               hero          = Hero(&heroAnimation, heroWidth, heroHeight, screenWidth, screenHeight);
+    std::vector<Enemy> enemies       = {};
 
     SetTargetFPS(60);
 
@@ -23,7 +28,7 @@ int main() {
         frameCount++;
 
         if (enemies.empty()) {
-            enemies.emplace_back(&animation, FROG, screenWidth, screenHeight, &hero.position);
+            enemies.emplace_back(&frogAnimation, FROG, frogWidth, frogHeight, screenWidth, screenHeight, &hero.position);
         }
 
         hero.move();

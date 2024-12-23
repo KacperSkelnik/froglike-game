@@ -26,7 +26,8 @@ class Hero final: public Object {
   public:
     Hero(
         Animation* animation,
-        ObjectType type,
+        float      width,
+        float      height,
         float      screenWidth,
         float      screenHeight
     );

@@ -11,6 +11,8 @@
 Enemy::Enemy(
     Animation*       animation,
     const ObjectType type,
+    const float      width,
+    const float      height,
     const float      screenWidth,
     const float      screenHeight,
     Vector2*         heroPosition
@@ -18,7 +20,8 @@ Enemy::Enemy(
     Object(
         animation,
         type,
-        50,
+        width,
+        height,
         1,
         screenWidth,
         screenHeight
@@ -27,8 +30,8 @@ Enemy::Enemy(
     jumpForce(-30),
     heroPosition(heroPosition) {
 
-    const auto initialX = static_cast<float>(GetRandomValue(static_cast<int>(radius), static_cast<int>(screenWidth - radius)));
-    const float initialY = screenHeight - radius;
+    const auto initialX = static_cast<float>(GetRandomValue(static_cast<int>(width), static_cast<int>(screenWidth - width)));
+    const float initialY = screenHeight - height;
     this->position       = Vector2(initialX, initialY);
 }
 
