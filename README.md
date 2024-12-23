@@ -1,1 +1,2 @@
-- frog asset source: https://duckhive.itch.io/froggo
+- frog assets source: https://duckhive.itch.io/froggo
+- hero assets source: https://duckhive.itch.io/ducky
