@@ -11,18 +11,24 @@ class TileMap {
   private:
     tmx::Map   map;
     Texture2D* textures;
+    float      scaleX;
+    float      scaleY;
 
-    static void drawTile(
+    void drawTile(
         const Texture2D& texture,
-        int              tileID,
-        int              posX,
-        int              posY,
-        int              tileWidth,
-        int              tileHeight
-    );
+        unsigned         tileID,
+        unsigned         posX,
+        unsigned         posY,
+        unsigned         tileWidth,
+        unsigned         tileHeight
+    ) const;
 
   public:
-    explicit TileMap(const char* path);
+    explicit TileMap(
+        unsigned    screenWidth,
+        unsigned    screenHeight,
+        const char* path
+    );
     void draw() const;
 };
 

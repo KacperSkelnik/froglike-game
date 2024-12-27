@@ -8,7 +8,11 @@
 #include <iostream>
 #include <tmxlite/TileLayer.hpp>
 
-TileMap::TileMap(const char* path) {
+TileMap::TileMap(
+    const unsigned screenWidth,
+    const unsigned screenHeight,
+    const char*    path
+) {
     if (map.load(path)) {
         const std::vector<tmx::Tileset>& tileSets = map.getTilesets();
         assert(!tileSets.empty());
@@ -18,23 +22,37 @@ TileMap::TileMap(const char* path) {
             _textures[i]      = LoadTexture(_path);
         }
         textures = _textures;
+        scaleX   = static_cast<float>(screenWidth) / static_cast<float>(map.getTileCount().x * map.getTileSize().x);
+        scaleY   = static_cast<float>(screenHeight) / static_cast<float>(map.getTileCount().y * map.getTileSize().y);
     }
 }
 
 void TileMap::drawTile(
     const Texture2D& texture,
-    int              tileID,
-    int              posX,
-    int              posY,
-    int              tileWidth,
-    int              tileHeight
-) {
+    const unsigned   tileID,
+    const unsigned   posX,
+    const unsigned   posY,
+    const unsigned   tileWidth,
+    const unsigned   tileHeight
+) const {
     // Calculate the position of the tile in the tileset texture based on its tile ID
-    const int tileX = ((tileID - 1) % (texture.width / tileWidth)) * tileWidth;
-    const int tileY = ((tileID - 1) / (texture.width / tileWidth)) * tileHeight;
+    const unsigned tileX = ((tileID - 1) % (texture.width / tileWidth)) * tileWidth;
+    const unsigned tileY = ((tileID - 1) / (texture.width / tileWidth)) * tileHeight;
 
-    const Rectangle sourceRect = {(float) tileX, (float) tileY, (float) tileWidth, (float) tileHeight};
-    const Rectangle destRect   = {(float) posX, (float) posY, (float) tileWidth, (float) tileHeight};
+    // clang-format off
+    const Rectangle sourceRect = {
+        static_cast<float>(tileX),
+        static_cast<float>(tileY),
+        static_cast<float>(tileWidth),
+        static_cast<float>(tileHeight)
+    };
+    const Rectangle destRect = {
+        static_cast<float>(posX),
+        static_cast<float>(posY),
+        scaleX * static_cast<float>(tileWidth),
+        scaleY * static_cast<float>(tileHeight)
+    };
+    // clang-format on
     DrawTexturePro(texture, sourceRect, destRect, Vector2 {0, 0}, 0, WHITE);
 }
 
@@ -65,8 +83,8 @@ void TileMap::draw() const {
                     }
                     if (tile.ID != 0) {
                         // Calculate the position of the tile on the screen
-                        const unsigned tileX = x * tileSize.x;
-                        const unsigned tileY = y * tileSize.y;
+                        const auto tileX = static_cast<unsigned>(floor(scaleX * static_cast<float>(x * tileSize.x)));
+                        const auto tileY = static_cast<unsigned>(floor(scaleY * static_cast<float>(y * tileSize.y)));
                         // Draw the tile at the calculated position
                         drawTile(textures[textureIndex], tile.ID - offset, tileX, tileY, tileSize.x, tileSize.y);
                     }

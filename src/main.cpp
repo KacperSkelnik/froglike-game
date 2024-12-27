@@ -16,7 +16,7 @@ int main() {
 
     int frameCount = 0;
 
-    const TileMap tileMap = TileMap("../assets/tilemap/example.tmx");
+    const TileMap tileMap = TileMap(screenWidth, screenHeight, "../assets/tilemap/example.tmx");
 
     Animation          heroAnimation = Animation(&frameCount, heroWidth, heroHeight);
     Animation          frogAnimation = Animation(&frameCount, frogWidth, frogHeight);
