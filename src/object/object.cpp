@@ -18,7 +18,7 @@ void Object::keepGrounded() {
 }
 
 void Object::pushAwayFromTheRoof() {
-    if (const float center = position.y - height; center <= 0) {
+    if (const float center = position.y; center <= 0) {
         auto [x, y] = Basic(center, 270).vector();
         resultantForce.x += x;
         resultantForce.y += y;

@@ -1,3 +1,4 @@
+#include "environment/tilemap.h"
 #include "object/enemy.h"
 #include "object/hero.h"
 #include "raylib.h"
@@ -15,6 +16,8 @@ int main() {
 
     int frameCount = 0;
 
+    const TileMap tileMap = TileMap("../assets/tilemap/example.tmx");
+
     Animation          heroAnimation = Animation(&frameCount, heroWidth, heroHeight);
     Animation          frogAnimation = Animation(&frameCount, frogWidth, frogHeight);
     Hero               hero          = Hero(&heroAnimation, heroWidth, heroHeight, screenWidth, screenHeight);
@@ -26,6 +29,8 @@ int main() {
     // Detect window close button or ESC key
     while (!WindowShouldClose()) {
         frameCount++;
+
+        tileMap.draw();
 
         if (enemies.empty()) {
             enemies.emplace_back(&frogAnimation, FROG, frogWidth, frogHeight, screenWidth, screenHeight, &hero.position);

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.30.5)
 project(froglike-game)
 
 set(CMAKE_CXX_STANDARD 20)
@@ -6,9 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 # Include the command that downloads libraries
 include(FetchContent)
 
-# define a function for adding git dependencies
-function(include_dependency libName gitURL gitTag)
-    # setup the declare
+function(fetch_dependency libName gitURL gitTag)
     FetchContent_Declare(${libName}
             GIT_REPOSITORY ${gitURL}
             GIT_TAG ${gitTag}
@@ -16,18 +14,32 @@ function(include_dependency libName gitURL gitTag)
             GIT_PROGRESS TRUE
     )
 
+    FetchContent_GetProperties(${libName})
+    if (NOT ${libName}_POPULATED)
+        foreach (arg IN LISTS ARGN)
+            if (arg MATCHES "([^=]+)=(.*)")
+                set(${CMAKE_MATCH_1} ${CMAKE_MATCH_2})
+            endif ()
+        endforeach ()
+    endif ()
+
     FetchContent_MakeAvailable(${libName})
 endfunction()
 
+function(add_dependency libName gitURL gitTag)
+    find_package(${libName} QUIET)
+    if (NOT ${libName}_FOUND)
+        message(STATUS "Getting ${libName} from Github")
+        fetch_dependency(${libName} ${gitURL} ${gitTag} ${ARGN})
+    else ()
+        message(STATUS "Using local ${libName}")
+    endif ()
+endfunction()
+
 # add raylib support
-set(LIB1 raylib)
-find_package(${LIB1} QUIET)
-if (NOT ${LIB1}_FOUND)
-    message(STATUS "Getting ${LIB1} from Github")
-    include_dependency(${LIB1} https://github.com/raysan5/raylib.git 5.5)
-else ()
-    message(STATUS "Using local ${LIB1}")
-endif ()
+add_dependency(raylib https://github.com/raysan5/raylib.git 5.5)
+# add tileson support
+add_dependency(tmxlite https://github.com/fallahn/tmxlite v1.4.4 TMXLITE_STATIC_LIB=TRUE)
 
 add_executable(froglike_game src/main.cpp
         src/force/force.h
@@ -44,10 +56,10 @@ add_executable(froglike_game src/main.cpp
         src/object/type.h
         src/object/side.h
         src/animation/sprite.h
+        src/environment/tilemap.cpp
+        src/environment/tilemap.h
 )
 
-# set the include directory
-target_include_directories(froglike_game PRIVATE ${raylib_INCLUDE_DIRS})
-
 # link all libraries to the project
-target_link_libraries(froglike_game PRIVATE ${LIB1})
+add_subdirectory(${CMAKE_BINARY_DIR}/_deps/tmxlite-src/tmxlite)
+target_link_libraries(froglike_game PRIVATE raylib tmxlite)
