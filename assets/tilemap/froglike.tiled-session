@@ -3,15 +3,28 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "example.tmx",
     "expandedProjectPaths": [
+        "."
     ],
     "fileStates": {
         ":/automap-tiles.tsx": {
             "scaleInDock": 1
         },
+        "example.tmx": {
+            "scale": 3.404166666666667,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 234.85924112607103,
+                "y": 159.06976744186045
+            }
+        },
         "swamp.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 3,
+            "scaleInEditor": 1
+        },
+        "textures.tsx": {
+            "scaleInDock": 3,
             "scaleInEditor": 1
         }
     },
@@ -22,10 +35,15 @@
     "map.tileHeight": 16,
     "map.tileWidth": 16,
     "openFiles": [
+        "example.tmx",
+        "swamp.tsx",
+        "textures.tsx"
     ],
     "project": "froglike.tiled-project",
     "recentFiles": [
-        "swamp.tsx"
+        "textures.tsx",
+        "swamp.tsx",
+        "example.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

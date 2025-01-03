@@ -4,6 +4,7 @@
 
 #include "tilemap.h"
 
+#include "layerType.h"
 #include "raylib.h"
 #include <iostream>
 #include <tmxlite/TileLayer.hpp>
@@ -27,14 +28,19 @@ TileMap::TileMap(
     }
 }
 
+std::vector<Rectangle> TileMap::getGrounds() const {
+    return grounds;
+}
+
 void TileMap::drawTile(
     const Texture2D& texture,
     const unsigned   tileID,
     const unsigned   posX,
     const unsigned   posY,
     const unsigned   tileWidth,
-    const unsigned   tileHeight
-) const {
+    const unsigned   tileHeight,
+    const LayerType  layerType
+) {
     // Calculate the position of the tile in the tileset texture based on its tile ID
     const unsigned tileX = ((tileID - 1) % (texture.width / tileWidth)) * tileWidth;
     const unsigned tileY = ((tileID - 1) / (texture.width / tileWidth)) * tileHeight;
@@ -54,9 +60,11 @@ void TileMap::drawTile(
     };
     // clang-format on
     DrawTexturePro(texture, sourceRect, destRect, Vector2 {0, 0}, 0, WHITE);
+
+    if (layerType == GROUND) grounds.push_back(destRect);
 }
 
-void TileMap::draw() const {
+void TileMap::draw() {
     const tmx::Vector2u              tileSize = map.getTileSize();
     const std::vector<tmx::Tileset>& tileSets = map.getTilesets();
 
@@ -66,8 +74,9 @@ void TileMap::draw() const {
     // Render tile layers
     for (const auto& layer : map.getLayers()) {
         if (layer->getType() == tmx::Layer::Type::Tile) {
-            const auto& tileLayer = layer->getLayerAs<tmx::TileLayer>();
-            const auto& tiles     = tileLayer.getTiles();
+            const auto&     tileLayer = layer->getLayerAs<tmx::TileLayer>();
+            const auto&     tiles     = tileLayer.getTiles();
+            const LayerType layerType = fromString(tileLayer.getClass());
 
             // Iterate through the tiles within the layer's dimensions
             for (unsigned y = 0; y < height; y++) {
@@ -86,7 +95,7 @@ void TileMap::draw() const {
                         const auto tileX = static_cast<unsigned>(floor(scaleX * static_cast<float>(x * tileSize.x)));
                         const auto tileY = static_cast<unsigned>(floor(scaleY * static_cast<float>(y * tileSize.y)));
                         // Draw the tile at the calculated position
-                        drawTile(textures[textureIndex], tile.ID - offset, tileX, tileY, tileSize.x, tileSize.y);
+                        drawTile(textures[textureIndex], tile.ID - offset, tileX, tileY, tileSize.x, tileSize.y, layerType);
                     }
                 }
             }

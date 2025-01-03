@@ -26,6 +26,7 @@ class Hero final: public Object {
   public:
     Hero(
         Animation* animation,
+        TileMap*   tileMap,
         float      width,
         float      height,
         float      screenWidth,

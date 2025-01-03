@@ -26,6 +26,7 @@ class Enemy final: public Object {
   public:
     Enemy(
         Animation* animation,
+        TileMap*   tileMap,
         ObjectType type,
         float      width,
         float      height,

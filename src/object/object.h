@@ -5,6 +5,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 #include "../animation/animation.h"
+#include "../environment/tilemap.h"
 #include "../force/force.h"
 #include "type.h"
 #include <raylib.h>
@@ -25,21 +26,25 @@ class Object {
     Vector2 resultantForce {};
     Vector2 velocity {};
 
-    Animation* animation;
+    bool isGrounded = false;
 
-    [[nodiscard]] bool isGrounded() const;
-    void               keepGrounded();
-    void               pushAwayFromTheRoof();
-    void               pushAwayFromTheLeftWall();
-    void               pushAwayFromTheRightWall();
-    void               applyAirResistance();
-    void               applyForces();
-    void               restartForces();
-    virtual SpriteDef  getSprite() = 0;
+    Animation* animation;
+    TileMap*   tileMap;
+
+    void                    checkCollisions();
+    void                    pushAwayFromTheRoof();
+    void                    pushAwayFromTheLeftWall();
+    void                    pushAwayFromTheRightWall();
+    void                    applyAirResistance();
+    void                    applyForces();
+    void                    restartForces();
+    virtual SpriteDef       getSprite() = 0;
+    [[nodiscard]] Rectangle getRectangle() const;
 
   public:
     explicit Object(
         Animation* animation,
+        TileMap*   tileMap,
         ObjectType type,
         float      width,
         float      height,

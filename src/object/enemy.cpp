@@ -10,6 +10,7 @@
 
 Enemy::Enemy(
     Animation*       animation,
+    TileMap*         tileMap,
     const ObjectType type,
     const float      width,
     const float      height,
@@ -19,6 +20,7 @@ Enemy::Enemy(
 ):
     Object(
         animation,
+        tileMap,
         type,
         width,
         height,
@@ -37,9 +39,9 @@ Enemy::Enemy(
 
 void Enemy::move() {
     frameCount++;
-    if (!isGrounded() || frameCount % 100 == 0) {
+    if (!isGrounded || frameCount % 100 == 0) {
         Vector2 force = {0, 0};
-        if (isGrounded() && framesToLand == 0 && framesToTurn == 0) {
+        if (isGrounded && framesToLand == 0 && framesToTurn == 0) {
             const float dx    = position.x - heroPosition->x;
             const float dy    = position.y - heroPosition->y;
             const float angle = 180 - static_cast<float>(atan2(dy, dx) * 180.0f / std::numbers::pi);
@@ -61,7 +63,7 @@ void Enemy::move() {
 }
 
 SpriteDef Enemy::getSprite() {
-    if (isGrounded()) {
+    if (isGrounded) {
         if (framesToLand > 0) {
             framesToLand--;
             return SpriteDef {type, LAND, side};

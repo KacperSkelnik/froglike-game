@@ -58,6 +58,7 @@ add_executable(froglike_game src/main.cpp
         src/animation/sprite.h
         src/environment/tilemap.cpp
         src/environment/tilemap.h
+        src/environment/layerType.h
 )
 
 # link all libraries to the project

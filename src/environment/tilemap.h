@@ -4,15 +4,17 @@
 
 #ifndef MAP_H
 #define MAP_H
+#include "layerType.h"
 #include "raylib.h"
 #include <tmxlite/Map.hpp>
 
 class TileMap {
   private:
-    tmx::Map   map;
-    Texture2D* textures;
-    float      scaleX;
-    float      scaleY;
+    tmx::Map               map;
+    Texture2D*             textures;
+    float                  scaleX;
+    float                  scaleY;
+    std::vector<Rectangle> grounds = {};
 
     void drawTile(
         const Texture2D& texture,
@@ -20,8 +22,9 @@ class TileMap {
         unsigned         posX,
         unsigned         posY,
         unsigned         tileWidth,
-        unsigned         tileHeight
-    ) const;
+        unsigned         tileHeight,
+        LayerType        layerType
+    );
 
   public:
     explicit TileMap(
@@ -29,7 +32,8 @@ class TileMap {
         unsigned    screenHeight,
         const char* path
     );
-    void draw() const;
+    [[nodiscard]] std::vector<Rectangle> getGrounds() const;
+    void                                 draw();
 };
 
 #endif // MAP_H

@@ -7,6 +7,7 @@
 
 Hero::Hero(
     Animation*  animation,
+    TileMap*    tileMap,
     const float width,
     const float height,
     const float screenWidth,
@@ -14,6 +15,7 @@ Hero::Hero(
 ):
     Object(
         animation,
+        tileMap,
         ObjectType::HERO,
         width,
         height,
@@ -25,7 +27,7 @@ Hero::Hero(
     jumpForce(-25.0f) {
 
     this->gravity  = Gravity(mass).vector();
-    this->position = Vector2(screenWidth / 2, screenHeight - height);
+    this->position = Vector2(screenWidth / 2, screenHeight - 3 * height);
 }
 
 void Hero::move() {
@@ -45,7 +47,7 @@ void Hero::move() {
     };
 
     isWalking = false;
-    if (bool grounded = isGrounded()) {
+    if (isGrounded) {
         // jumping
         if (IsKeyDown(KEY_UP)) {
             auto [_, y] = Basic(jumpForce, 90).vector();
@@ -58,19 +60,19 @@ void Hero::move() {
 
         // left/right
         if (!isSquatting) {
-            leftRightMovement(this, grounded);
+            leftRightMovement(this, isGrounded);
         } else {
             if (IsKeyDown(KEY_RIGHT)) side = RIGHT;
             if (IsKeyDown(KEY_LEFT)) side = LEFT;
         }
     } else {
         // left/right - in air
-        leftRightMovement(this, grounded);
+        leftRightMovement(this, isGrounded);
     }
 }
 
 SpriteDef Hero::getSprite() {
-    if (isGrounded()) {
+    if (isGrounded) {
         if (framesToLand > 0) {
             framesToLand--;
             return SpriteDef {type, LAND, side};

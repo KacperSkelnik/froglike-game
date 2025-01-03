@@ -16,12 +16,11 @@ int main() {
 
     int frameCount = 0;
 
-    const TileMap tileMap = TileMap(screenWidth, screenHeight, "../assets/tilemap/example.tmx");
+    TileMap tileMap = TileMap(screenWidth, screenHeight, "../assets/tilemap/example.tmx");
 
-    Animation          heroAnimation = Animation(&frameCount, heroWidth, heroHeight);
-    Animation          frogAnimation = Animation(&frameCount, frogWidth, frogHeight);
-    Hero               hero          = Hero(&heroAnimation, heroWidth, heroHeight, screenWidth, screenHeight);
-    std::vector<Enemy> enemies       = {};
+    Animation          animation = Animation(&frameCount);
+    Hero               hero      = Hero(&animation, &tileMap, heroWidth, heroHeight, screenWidth, screenHeight);
+    std::vector<Enemy> enemies   = {};
 
     SetTargetFPS(60);
 
@@ -33,7 +32,7 @@ int main() {
         tileMap.draw();
 
         if (enemies.empty()) {
-            enemies.emplace_back(&frogAnimation, FROG, frogWidth, frogHeight, screenWidth, screenHeight, &hero.position);
+            // enemies.emplace_back(&animation, &tileMap, FROG, frogWidth, frogHeight, screenWidth, screenHeight, &hero.position);
         }
 
         hero.move();
