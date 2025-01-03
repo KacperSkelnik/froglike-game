@@ -7,20 +7,18 @@
 #include "../force/force.h"
 
 void Object::checkCollisions() {
-    const Rectangle objectsRect = getRectangle();
-    isGrounded                  = false;
-    bool wallDetected           = false;
+    isGrounded        = false;
+    bool wallDetected = false;
     for (const Rectangle& rectangle : tileMap->getGrounds()) {
-        if (CheckCollisionRecs(rectangle, objectsRect)) {
-            const bool isOverTheRect = screenHeight - rectangle.y <=
-                                       screenHeight - objectsRect.y - objectsRect.height + rectangle.height;
+        if (CheckCollisionRecs(rectangle, getRectangle())) {
+            const bool isOverTheRect = screenHeight - rectangle.y <= screenHeight - position.y - height + rectangle.height;
+
+            float overlaps;
+            if (rectangle.x < position.x) overlaps = rectangle.width - (position.x - rectangle.x);
+            else overlaps = width - (rectangle.x - position.x);
 
             // check if object is on the ground
             if (isOverTheRect && !isGrounded) {
-                float overlaps;
-                if (rectangle.x < objectsRect.x) overlaps = rectangle.width - (objectsRect.x - rectangle.x);
-                else overlaps = objectsRect.width - (rectangle.x - objectsRect.x);
-
                 if (overlaps > 0.3 * width) {
                     velocity.y = 0;
                     position.y = rectangle.y - height;
@@ -28,78 +26,56 @@ void Object::checkCollisions() {
                 }
             }
             // check if object is under the platform
-            if (!isOverTheRect && rectangle.y < objectsRect.y) {
-                velocity.y = 0;
-                velocity.x = 0;
+            if (!isOverTheRect && rectangle.y < position.y && overlaps > 0.8 * width) {
+                resultantForce.y = gravity.y;
+                position.y       = rectangle.y + rectangle.height;
             }
             // handle walls
             else if (!isOverTheRect && !wallDetected) {
-                velocity.x   = 0;
                 wallDetected = true;
-                if (rectangle.x + rectangle.width - objectsRect.x > objectsRect.x - rectangle.x + rectangle.width) {
-                    position.x = rectangle.x - objectsRect.width;
+                Vector2 force;
+                if (rectangle.x + rectangle.width - position.x > position.x - rectangle.x + rectangle.width) {
+                    force = Basic(position.x + width - rectangle.x, 180).vector();
                 } else {
-                    position.x = rectangle.x + rectangle.width;
+                    force = Basic(rectangle.x + rectangle.width - position.x, 0).vector();
                 }
+                resultantForce.x += force.x;
             }
-            // Nothing else to check
-            if (isGrounded && wallDetected) break;
         }
     }
 }
 
-void Object::pushAwayFromTheRoof() {
-    if (const float center = position.y; center <= 0) {
-        auto [x, y] = Basic(center, 270).vector();
-        resultantForce.x += x;
-        resultantForce.y += y;
-    }
+void Object::applyResistance() {
+    auto [xResistance, _] = Resistance(velocity, 0.1).vector();
+    velocity.x += xResistance;
 }
 
-void Object::pushAwayFromTheLeftWall() {
-    if (const float center = position.x; center <= 0) {
-        auto [x, y] = Basic(-center, 0).vector();
-        resultantForce.x += x;
-        resultantForce.y += y;
-    }
+void Object::applyGravity() {
+    if (!isGrounded) resultantForce.y = gravity.y;
 }
 
-void Object::pushAwayFromTheRightWall() {
-    if (const float center = position.x + width; center >= screenWidth) {
-        auto [x, y] = Basic(center - screenWidth, 180).vector();
-        resultantForce.x += x;
-        resultantForce.y += y;
-    }
-}
-
-void Object::applyAirResistance() {
-    auto [xResistance, yResistance] = AirResistance(velocity, 0.1).vector();
-    resultantForce.x += xResistance;
-    resultantForce.y += yResistance;
-}
-
-void Object::applyForces() {
-    pushAwayFromTheRoof();
-    pushAwayFromTheLeftWall();
-    pushAwayFromTheRightWall();
-    applyAirResistance();
-
-    velocity.x += resultantForce.x / mass;
-    velocity.y += resultantForce.y / mass;
-    position.x += velocity.x;
-    position.y += velocity.y;
-
+void Object::applyForces(const float* deltaTime) {
+    applyGravity();
     checkCollisions();
+    applyResistance();
+
+    const float accelerationX = resultantForce.x / mass;
+    velocity.x += accelerationX * *deltaTime * 0.5f;
+    position.x += velocity.x * *deltaTime;
+    velocity.x += accelerationX * *deltaTime * 0.5f;
+
+    const float accelerationY = resultantForce.y / mass;
+    velocity.y += accelerationY * *deltaTime * 0.5f;
+    position.y += velocity.y * *deltaTime;
+    velocity.y += accelerationY * *deltaTime * 0.5f;
+
+    // don't remove!
+    resultantForce.x = 0;
 }
 
-void Object::restartForces() {
-    resultantForce = gravity;
-}
-
-void Object::draw() {
-    applyForces();
+void Object::draw(const float* deltaTime) {
+    applyForces(deltaTime);
     animation->animate(getSprite(), getRectangle());
-    restartForces();
 }
 
 Rectangle Object::getRectangle() const {

@@ -24,7 +24,7 @@ Enemy::Enemy(
         type,
         width,
         height,
-        1,
+        2,
         screenWidth,
         screenHeight
     ),

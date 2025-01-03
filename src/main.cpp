@@ -1,4 +1,5 @@
 #include "environment/tilemap.h"
+#include "environment/time.h"
 #include "object/enemy.h"
 #include "object/hero.h"
 #include "raylib.h"
@@ -16,23 +17,25 @@ int main() {
 
     int frameCount = 0;
 
+    Time    time    = Time(60);
     TileMap tileMap = TileMap(screenWidth, screenHeight, "../assets/tilemap/example.tmx");
 
     Animation          animation = Animation(&frameCount);
     Hero               hero      = Hero(&animation, &tileMap, heroWidth, heroHeight, screenWidth, screenHeight);
     std::vector<Enemy> enemies   = {};
 
-    SetTargetFPS(60);
-
     // Main game loop
     // Detect window close button or ESC key
     while (!WindowShouldClose()) {
+        PollInputEvents(); // Poll input events (SUPPORT_CUSTOM_FRAME_CONTROL)
+
         frameCount++;
+        float deltaTime = time.deltaTime();
 
         tileMap.draw();
 
         if (enemies.empty()) {
-            // enemies.emplace_back(&animation, &tileMap, FROG, frogWidth, frogHeight, screenWidth, screenHeight, &hero.position);
+            enemies.emplace_back(&animation, &tileMap, FROG, frogWidth, frogHeight, screenWidth, screenHeight, &hero.position);
         }
 
         hero.move();
@@ -41,17 +44,17 @@ int main() {
         }
 
         BeginDrawing();
+        {
+            ClearBackground(RAYWHITE);
 
-        DrawText(TextFormat("Frame: %i", frameCount), 10, 10, 20, BLACK);
-        ClearBackground(RAYWHITE);
-
-        hero.draw();
-        for (auto& enemy : enemies) {
-            enemy.draw();
+            hero.draw(&deltaTime);
+            for (auto& enemy : enemies) {
+                enemy.draw(&deltaTime);
+            }
         }
-
         EndDrawing();
 
+        SwapScreenBuffer();
         frameCount = frameCount % 1000;
     }
 

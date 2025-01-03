@@ -27,17 +27,23 @@ class Basic final: public Force {
     float angle;
 
   public:
-    explicit Basic(float newtons, float angle);
+    explicit Basic(
+        float newtons,
+        float angle
+    );
     [[nodiscard]] Vector2 vector() override;
 };
 
-class AirResistance final: public Force {
+class Resistance final: public Force {
   private:
-    Vector2 resultantForce;
+    Vector2 velocity;
     float   factor;
 
   public:
-    explicit AirResistance(Vector2 resultantForce, float factor);
+    explicit Resistance(
+        Vector2 velocity,
+        float   factor
+    );
     [[nodiscard]] Vector2 vector() override;
 };
 

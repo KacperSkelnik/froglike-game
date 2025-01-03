@@ -19,12 +19,12 @@ Hero::Hero(
         ObjectType::HERO,
         width,
         height,
-        1,
+        3,
         screenWidth,
         screenHeight
     ),
-    stepForce(2.0f),
-    jumpForce(-25.0f) {
+    stepForce(4.0f),
+    jumpForce(-26.0f) {
 
     this->gravity  = Gravity(mass).vector();
     this->position = Vector2(screenWidth / 2, screenHeight - 3 * height);

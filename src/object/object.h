@@ -23,8 +23,8 @@ class Object {
     ObjectSide previousSide = NONE;
 
     Vector2 gravity = Gravity(mass).vector();
-    Vector2 resultantForce {};
-    Vector2 velocity {};
+    Vector2 resultantForce {0, 0};
+    Vector2 velocity {0, 0};
 
     bool isGrounded = false;
 
@@ -32,12 +32,9 @@ class Object {
     TileMap*   tileMap;
 
     void                    checkCollisions();
-    void                    pushAwayFromTheRoof();
-    void                    pushAwayFromTheLeftWall();
-    void                    pushAwayFromTheRightWall();
-    void                    applyAirResistance();
-    void                    applyForces();
-    void                    restartForces();
+    void                    applyResistance();
+    void                    applyGravity();
+    void                    applyForces(const float* deltaTime);
     virtual SpriteDef       getSprite() = 0;
     [[nodiscard]] Rectangle getRectangle() const;
 
@@ -55,7 +52,7 @@ class Object {
     virtual ~Object() = default;
     Vector2 position {};
 
-    void draw();
+    void draw(const float* deltaTime);
 
     virtual void move() {};
 };
