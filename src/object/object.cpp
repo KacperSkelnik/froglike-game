@@ -26,7 +26,8 @@ void Object::checkCollisions() {
                 }
             }
             // check if object is under the platform
-            if (!isOverTheRect && rectangle.y < position.y && overlaps > 0.8 * width) {
+            if (!isOverTheRect && rectangle.y < position.y && overlaps > 0.5 * width) {
+                velocity.y       = 0;
                 resultantForce.y = gravity.y;
                 position.y       = rectangle.y + rectangle.height;
             }
@@ -46,7 +47,7 @@ void Object::checkCollisions() {
 }
 
 void Object::applyResistance() {
-    auto [xResistance, _] = Resistance(velocity, 0.1).vector();
+    auto [xResistance, _] = Resistance(velocity, 0.2).vector();
     velocity.x += xResistance;
 }
 

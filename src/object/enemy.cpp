@@ -28,7 +28,7 @@ Enemy::Enemy(
         screenWidth,
         screenHeight
     ),
-    stepForce(1),
+    stepForce(2),
     jumpForce(-30),
     heroPosition(heroPosition) {
 

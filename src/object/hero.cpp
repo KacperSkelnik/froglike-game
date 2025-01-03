@@ -23,7 +23,7 @@ Hero::Hero(
         screenWidth,
         screenHeight
     ),
-    stepForce(4.0f),
+    stepForce(8.0f),
     jumpForce(-26.0f) {
 
     this->gravity  = Gravity(mass).vector();
