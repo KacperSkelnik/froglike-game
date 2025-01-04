@@ -9,9 +9,7 @@ Hero::Hero(
     Animation*  animation,
     TileMap*    tileMap,
     const float width,
-    const float height,
-    const float screenWidth,
-    const float screenHeight
+    const float height
 ):
     Object(
         animation,
@@ -19,15 +17,13 @@ Hero::Hero(
         ObjectType::HERO,
         width,
         height,
-        3,
-        screenWidth,
-        screenHeight
+        3
     ),
     stepForce(8.0f),
     jumpForce(-26.0f) {
 
     this->gravity  = Gravity(mass).vector();
-    this->position = Vector2(screenWidth / 2, screenHeight - 3 * height);
+    this->position = Vector2(GetScreenWidth() / 2, GetScreenHeight() - 3 * height);
 }
 
 void Hero::move() {

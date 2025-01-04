@@ -28,9 +28,7 @@ class Hero final: public Object {
         Animation* animation,
         TileMap*   tileMap,
         float      width,
-        float      height,
-        float      screenWidth,
-        float      screenHeight
+        float      height
     );
     void move() override;
 };

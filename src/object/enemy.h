@@ -30,8 +30,6 @@ class Enemy final: public Object {
         ObjectType type,
         float      width,
         float      height,
-        float      screenWidth,
-        float      screenHeight,
         Vector2*   heroPosition
     );
     void move() override;

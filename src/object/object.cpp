@@ -11,7 +11,8 @@ void Object::checkCollisions() {
     bool wallDetected = false;
     for (const Rectangle& rectangle : tileMap->getGrounds()) {
         if (CheckCollisionRecs(rectangle, getRectangle())) {
-            const bool isOverTheRect = screenHeight - rectangle.y <= screenHeight - position.y - height + rectangle.height;
+            const bool isOverTheRect = GetScreenHeight() - rectangle.y <=
+                                       GetScreenHeight() - position.y - height + rectangle.height;
 
             float overlaps;
             if (rectangle.x < position.x) overlaps = rectangle.width - (position.x - rectangle.x);
@@ -89,15 +90,11 @@ Object::Object(
     const ObjectType type,
     const float      width,
     const float      height,
-    const float      mass,
-    const float      screenWidth,
-    const float      screenHeight
+    const float      mass
 ):
     type(type),
     height(height),
     width(width),
     mass(mass),
-    screenWidth(screenWidth),
-    screenHeight(screenHeight),
     animation(animation),
     tileMap(tileMap) {}

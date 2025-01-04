@@ -17,8 +17,6 @@ class Object {
     float height;
     float width;
     float mass;
-    float screenWidth;
-    float screenHeight;
 
     ObjectSide previousSide = NONE;
 
@@ -45,9 +43,7 @@ class Object {
         ObjectType type,
         float      width,
         float      height,
-        float      mass,
-        float      screenWidth,
-        float      screenHeight
+        float      mass
     );
     virtual ~Object() = default;
     Vector2 position {};

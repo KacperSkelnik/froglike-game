@@ -5,7 +5,6 @@
 #include "enemy.h"
 
 #include "../force/force.h"
-#include <iostream>
 #include <numbers>
 
 Enemy::Enemy(
@@ -14,8 +13,6 @@ Enemy::Enemy(
     const ObjectType type,
     const float      width,
     const float      height,
-    const float      screenWidth,
-    const float      screenHeight,
     Vector2*         heroPosition
 ):
     Object(
@@ -24,16 +21,14 @@ Enemy::Enemy(
         type,
         width,
         height,
-        2,
-        screenWidth,
-        screenHeight
+        2
     ),
     stepForce(2),
     jumpForce(-30),
     heroPosition(heroPosition) {
 
-    const auto initialX = static_cast<float>(GetRandomValue(static_cast<int>(width), static_cast<int>(screenWidth - width)));
-    const float initialY = screenHeight - height;
+    const auto initialX = static_cast<float>(GetRandomValue(static_cast<int>(width), static_cast<int>(GetScreenWidth() - width)));
+    const float initialY = GetScreenHeight() - height;
     this->position       = Vector2(initialX, initialY);
 }
 

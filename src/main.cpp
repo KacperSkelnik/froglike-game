@@ -21,7 +21,7 @@ int main() {
     TileMap tileMap = TileMap(screenWidth, screenHeight, "../assets/tilemap/example.tmx");
 
     Animation          animation = Animation(&frameCount);
-    Hero               hero      = Hero(&animation, &tileMap, heroWidth, heroHeight, screenWidth, screenHeight);
+    Hero               hero      = Hero(&animation, &tileMap, heroWidth, heroHeight);
     std::vector<Enemy> enemies   = {};
 
     // Main game loop
@@ -33,7 +33,7 @@ int main() {
         float deltaTime = time.deltaTime();
 
         if (enemies.empty()) {
-            enemies.emplace_back(&animation, &tileMap, FROG, frogWidth, frogHeight, screenWidth, screenHeight, &hero.position);
+            enemies.emplace_back(&animation, &tileMap, FROG, frogWidth, frogHeight, &hero.position);
         }
 
         hero.move();
