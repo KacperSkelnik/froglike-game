@@ -7,7 +7,6 @@
 Time::Time(const int targetFPS): targetFPS(targetFPS) {}
 
 float Time::deltaTime() {
-    float        deltaTime      = 0;
     double       currentTime    = GetTime();
     const double updateDrawTime = currentTime - previousTime;
 
@@ -16,13 +15,13 @@ float Time::deltaTime() {
         if (waitTime > 0) {
             WaitTime(static_cast<float>(waitTime));
             currentTime = GetTime();
-            deltaTime   = static_cast<float>(currentTime - previousTime);
+            delta       = static_cast<float>(currentTime - previousTime);
         }
     } else {
-        deltaTime = static_cast<float>(updateDrawTime);
+        delta = static_cast<float>(updateDrawTime);
     }
 
     previousTime = currentTime;
 
-    return deltaTime * 50;
+    return delta * 50;
 }

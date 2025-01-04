@@ -10,6 +10,7 @@ class Time {
   private:
     double previousTime = GetTime();
     int    targetFPS;
+    float  delta = 0;
 
   public:
     explicit Time(int targetFPS);

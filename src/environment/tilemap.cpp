@@ -65,6 +65,7 @@ void TileMap::drawTile(
 }
 
 void TileMap::draw() {
+    grounds.clear();
     const tmx::Vector2u              tileSize = map.getTileSize();
     const std::vector<tmx::Tileset>& tileSets = map.getTilesets();
 

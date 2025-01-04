@@ -32,8 +32,6 @@ int main() {
         frameCount++;
         float deltaTime = time.deltaTime();
 
-        tileMap.draw();
-
         if (enemies.empty()) {
             enemies.emplace_back(&animation, &tileMap, FROG, frogWidth, frogHeight, screenWidth, screenHeight, &hero.position);
         }
@@ -46,6 +44,8 @@ int main() {
         BeginDrawing();
         {
             ClearBackground(RAYWHITE);
+
+            tileMap.draw();
 
             hero.draw(&deltaTime);
             for (auto& enemy : enemies) {
