@@ -6,7 +6,6 @@
 
 #include "layerType.h"
 #include "raylib.h"
-#include <iostream>
 #include <tmxlite/TileLayer.hpp>
 
 TileMap::TileMap(
