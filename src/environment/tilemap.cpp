@@ -6,13 +6,17 @@
 
 #include "layerType.h"
 #include "raylib.h"
+#include <iostream>
+#include <tmxlite/ImageLayer.hpp>
 #include <tmxlite/TileLayer.hpp>
 
 TileMap::TileMap(
-    const unsigned screenWidth,
-    const unsigned screenHeight,
-    const char*    path
-) {
+    const float scaleX,
+    const float scaleY,
+    const char* path
+):
+    scaleX(scaleX),
+    scaleY(scaleY) {
     if (map.load(path)) {
         const std::vector<tmx::Tileset>& tileSets = map.getTilesets();
         assert(!tileSets.empty());
@@ -22,8 +26,6 @@ TileMap::TileMap(
             _textures[i]      = LoadTexture(_path);
         }
         textures = _textures;
-        scaleX   = static_cast<float>(screenWidth) / static_cast<float>(map.getTileCount().x * map.getTileSize().x);
-        scaleY   = static_cast<float>(screenHeight) / static_cast<float>(map.getTileCount().y * map.getTileSize().y);
     }
 }
 
@@ -34,8 +36,8 @@ std::vector<Rectangle> TileMap::getGrounds() const {
 void TileMap::drawTile(
     const Texture2D& texture,
     const unsigned   tileID,
-    const unsigned   posX,
-    const unsigned   posY,
+    const float      posX,
+    const float      posY,
     const unsigned   tileWidth,
     const unsigned   tileHeight,
     const LayerType  layerType
@@ -52,8 +54,8 @@ void TileMap::drawTile(
         static_cast<float>(tileHeight)
     };
     const Rectangle destRect = {
-        static_cast<float>(posX),
-        static_cast<float>(posY),
+        posX,
+        posY,
         scaleX * static_cast<float>(tileWidth),
         scaleY * static_cast<float>(tileHeight)
     };
@@ -63,25 +65,36 @@ void TileMap::drawTile(
     if (layerType == GROUND) grounds.push_back(destRect);
 }
 
-void TileMap::draw() {
+void TileMap::draw(const GameCamera* camera) {
     grounds.clear();
-    const tmx::Vector2u              tileSize = map.getTileSize();
     const std::vector<tmx::Tileset>& tileSets = map.getTilesets();
 
-    const unsigned width  = map.getTileCount().x;
-    const unsigned height = map.getTileCount().y;
+    const auto width  = static_cast<float>(map.getTileCount().x);
+    const auto height = static_cast<float>(map.getTileCount().y);
 
-    // Render tile layers
+    const auto tileWidth  = static_cast<float>(map.getTileSize().x);
+    const auto tileHeight = static_cast<float>(map.getTileSize().y);
+
+    const auto screenWidth  = static_cast<float>(GetScreenWidth());
+    const auto screenHeight = static_cast<float>(GetScreenHeight());
+
     for (const auto& layer : map.getLayers()) {
+        // Render tile layers
         if (layer->getType() == tmx::Layer::Type::Tile) {
             const auto&     tileLayer = layer->getLayerAs<tmx::TileLayer>();
             const auto&     tiles     = tileLayer.getTiles();
             const LayerType layerType = fromString(tileLayer.getClass());
 
+            // apply only relevant part of the Tilemap
+            const float fromY = std::min(height, height + (camera->camera.target.y - camera->camera.offset.y) / tileHeight / scaleY);
+            const float toY   = std::max(0.f, fromY - 1 - screenHeight / tileHeight / scaleY);
+            const float fromX = std::max(0.f, (camera->camera.target.x - camera->camera.offset.x) / tileWidth / scaleX);
+            const float toX   = std::min(width, (camera->camera.target.x + screenWidth) / tileWidth / scaleX);
+
             // Iterate through the tiles within the layer's dimensions
-            for (unsigned y = 0; y < height; y++) {
-                for (unsigned x = 0; x < width; x++) {
-                    const tmx::TileLayer::Tile& tile         = tiles[(y * width) + x];
+            for (auto y = static_cast<unsigned>(fromY); y > static_cast<unsigned>(toY); y--) {
+                for (auto x = static_cast<unsigned>(fromX); x < static_cast<unsigned>(toX); x++) {
+                    const tmx::TileLayer::Tile& tile         = tiles[(y * static_cast<unsigned>(width)) + x];
                     unsigned                    offset       = 0;
                     unsigned                    textureIndex = 0;
                     for (unsigned i = 0; i < tileSets.size(); i++) {
@@ -92,13 +105,23 @@ void TileMap::draw() {
                     }
                     if (tile.ID != 0) {
                         // Calculate the position of the tile on the screen
-                        const auto tileX = static_cast<unsigned>(floor(scaleX * static_cast<float>(x * tileSize.x)));
-                        const auto tileY = static_cast<unsigned>(floor(scaleY * static_cast<float>(y * tileSize.y)));
+                        const float tileX = scaleX * (static_cast<float>(x) - fromX) * tileWidth;
+                        const float tileY = screenHeight - scaleY * (fromY - static_cast<float>(y)) * tileHeight;
+
                         // Draw the tile at the calculated position
-                        drawTile(textures[textureIndex], tile.ID - offset, tileX, tileY, tileSize.x, tileSize.y, layerType);
+                        drawTile(textures[textureIndex], tile.ID - offset, tileX, tileY, tileWidth, tileHeight, layerType);
                     }
                 }
             }
         }
     }
+}
+
+Vector2 TileMap::getDimensions() const {
+    const auto width      = static_cast<float>(map.getTileCount().x);
+    const auto height     = static_cast<float>(map.getTileCount().y);
+    const auto tileWidth  = static_cast<float>(map.getTileSize().x);
+    const auto tileHeight = static_cast<float>(map.getTileSize().y);
+
+    return {width * tileWidth * scaleX, height * tileHeight * scaleY};
 }

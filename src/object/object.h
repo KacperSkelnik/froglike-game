@@ -14,8 +14,10 @@ class Object {
   protected:
     ObjectType type;
 
-    float height;
-    float width;
+    float scaleX;
+    float scaleY;
+    float width  = 16 * scaleX;
+    float height = 16 * scaleY;
     float mass;
 
     ObjectSide previousSide = NONE;
@@ -29,10 +31,8 @@ class Object {
     Animation* animation;
     TileMap*   tileMap;
 
-    void                    checkCollisions();
     void                    applyResistance();
     void                    applyGravity();
-    void                    applyForces(const float* deltaTime);
     virtual SpriteDef       getSprite() = 0;
     [[nodiscard]] Rectangle getRectangle() const;
 
@@ -41,15 +41,16 @@ class Object {
         Animation* animation,
         TileMap*   tileMap,
         ObjectType type,
-        float      width,
-        float      height,
+        float      scaleX,
+        float      scaleY,
         float      mass
     );
     virtual ~Object() = default;
     Vector2 position {};
 
-    void draw(const float* deltaTime);
+    void draw();
 
+    virtual void applyForces(const float* deltaTime) {};
     virtual void move() {};
 };
 

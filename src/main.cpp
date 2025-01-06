@@ -1,3 +1,4 @@
+#include "camera/camera.h"
 #include "environment/tilemap.h"
 #include "environment/time.h"
 #include "object/enemy.h"
@@ -8,24 +9,19 @@
 int main() {
     constexpr int screenWidth  = 1280;
     constexpr int screenHeight = 720;
-    constexpr int heroWidth    = 96;
-    constexpr int heroHeight   = 96;
-    constexpr int frogWidth    = 80;
-    constexpr int frogHeight   = 40;
 
     InitWindow(screenWidth, screenHeight, "Froglike game");
 
     int frameCount = 0;
 
     Time    time    = Time(60);
-    TileMap tileMap = TileMap(screenWidth, screenHeight, "../assets/tilemap/example.tmx");
+    TileMap tileMap = TileMap(3, 3, "../assets/tilemap/example.tmx");
 
+    GameCamera         camera    = GameCamera();
     Animation          animation = Animation(&frameCount);
-    Hero               hero      = Hero(&animation, &tileMap, heroWidth, heroHeight);
+    Hero               hero      = Hero(&animation, &tileMap, &camera);
     std::vector<Enemy> enemies   = {};
 
-    // Main game loop
-    // Detect window close button or ESC key
     while (!WindowShouldClose()) {
         PollInputEvents(); // Poll input events (SUPPORT_CUSTOM_FRAME_CONTROL)
 
@@ -33,23 +29,30 @@ int main() {
         float deltaTime = time.deltaTime();
 
         if (enemies.empty()) {
-            enemies.emplace_back(&animation, &tileMap, FROG, frogWidth, frogHeight, &hero.position);
+            // enemies.emplace_back(&animation, &tileMap, FROG, &hero.position);
         }
 
+        // Hero updates
         hero.move();
+        hero.applyForces(&deltaTime);
+        auto [mapWidth, mapHeight] = tileMap.getDimensions();
+        camera.updateCenter(mapWidth, mapHeight);
+
+        // Enemies updates
         for (auto& enemy : enemies) {
             enemy.move();
+            enemy.applyForces(&deltaTime);
         }
 
         BeginDrawing();
         {
             ClearBackground(RAYWHITE);
+            tileMap.draw(&camera);
 
-            tileMap.draw();
+            hero.draw();
 
-            hero.draw(&deltaTime);
             for (auto& enemy : enemies) {
-                enemy.draw(&deltaTime);
+                enemy.draw();
             }
         }
         EndDrawing();

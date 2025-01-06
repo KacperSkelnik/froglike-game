@@ -6,21 +6,18 @@
 
 #include "../force/force.h"
 #include <numbers>
-
 Enemy::Enemy(
     Animation*       animation,
     TileMap*         tileMap,
     const ObjectType type,
-    const float      width,
-    const float      height,
     Vector2*         heroPosition
 ):
     Object(
         animation,
         tileMap,
         type,
-        width,
-        height,
+        3,
+        3,
         2
     ),
     stepForce(2),
@@ -83,4 +80,22 @@ SpriteDef Enemy::getSprite() {
         return SpriteDef {type, JUMP, side};
     }
     return SpriteDef {type, FALL, side};
+}
+
+void Enemy::applyForces(const float* deltaTime) {
+    applyGravity();
+    applyResistance();
+
+    const float accelerationX = resultantForce.x / mass;
+    velocity.x += accelerationX * *deltaTime * 0.5f;
+    position.x += velocity.x * *deltaTime;
+    velocity.x += accelerationX * *deltaTime * 0.5f;
+
+    const float accelerationY = resultantForce.y / mass;
+    velocity.y += accelerationY * *deltaTime * 0.5f;
+    position.y += velocity.y * *deltaTime;
+    velocity.y += accelerationY * *deltaTime * 0.5f;
+
+    // don't remove!
+    resultantForce.x = 0;
 }

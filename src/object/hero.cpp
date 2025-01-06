@@ -8,22 +8,24 @@
 Hero::Hero(
     Animation*  animation,
     TileMap*    tileMap,
-    const float width,
-    const float height
+    GameCamera* camera
 ):
     Object(
         animation,
         tileMap,
         ObjectType::HERO,
-        width,
-        height,
+        6,
+        6,
         3
     ),
-    stepForce(8.0f),
+    camera(camera),
+    collisions(Collisions(tileMap)),
+    stepForce(12.0f),
     jumpForce(-26.0f) {
 
-    this->gravity  = Gravity(mass).vector();
-    this->position = Vector2(GetScreenWidth() / 2, GetScreenHeight() - 3 * height);
+    this->gravity         = Gravity(mass).vector();
+    this->position        = Vector2(GetScreenWidth() / 2, GetScreenHeight() - 9 * height);
+    camera->camera.target = this->position;
 }
 
 void Hero::move() {
@@ -93,4 +95,59 @@ SpriteDef Hero::getSprite() {
         if (velocity.y > 0) return SpriteDef {type, FALL, side};
     }
     return SpriteDef {type, IDLE, side};
+}
+
+void Hero::applyForces(const float* deltaTime) {
+    // This function moves camera rather than the hero itself
+
+    // Collisions
+    collisions.detect(getRectangle());
+    const CollisionsRegister _register = collisions.getRegister();
+    isGrounded                         = _register.ground;
+
+    // Walls push back
+    if (_register.leftWall && _register.overlaps) {
+        resultantForce.x += Basic(_register.overlaps.value() / 1.8, 0).vector().x;
+    }
+    if (_register.rightWall && _register.overlaps) {
+        resultantForce.x += Basic(_register.overlaps.value() / 1.8, 180).vector().x;
+    }
+
+    // External forces
+    applyGravity();
+    applyResistance();
+
+    // Force into velocity
+    const float accelerationX = resultantForce.x / mass;
+    velocity.x += accelerationX * *deltaTime * 0.5f;
+    camera->camera.target.x += velocity.x * *deltaTime;
+    velocity.x += accelerationX * *deltaTime * 0.5f;
+
+    const float accelerationY = resultantForce.y / mass;
+    velocity.y += accelerationY * *deltaTime * 0.5f;
+    camera->camera.target.y += velocity.y * *deltaTime;
+    velocity.y += accelerationY * *deltaTime * 0.5f;
+
+    // Fround and ceiling adjustments
+    if (_register.ground && _register.groundY && velocity.y > 0) {
+        velocity.y              = 0;
+        resultantForce.y        = 0;
+        camera->camera.target.y = _register.groundY.value();
+    }
+    if (_register.ceiling && _register.ceilingY && velocity.y < 0) {
+        velocity.y              = 0;
+        resultantForce.y        = gravity.y;
+        camera->camera.target.y = _register.ceilingY.value() + height;
+    }
+
+    // Position update
+    position.x = camera->camera.offset.x - width;
+    position.y = camera->camera.offset.y - height;
+
+    // don't remove!
+    resultantForce.x = 0;
+}
+
+bool Hero::getGrounded() const {
+    return isGrounded;
 }

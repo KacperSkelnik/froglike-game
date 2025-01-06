@@ -4,10 +4,15 @@
 
 #ifndef HERO_H
 #define HERO_H
+#include "../camera/camera.h"
+#include "collisions.h"
 #include "object.h"
 
 class Hero final: public Object {
   private:
+    GameCamera* camera;
+    Collisions  collisions;
+
     float stepForce;
     float jumpForce;
     bool  isSquatting = false;
@@ -25,12 +30,13 @@ class Hero final: public Object {
 
   public:
     Hero(
-        Animation* animation,
-        TileMap*   tileMap,
-        float      width,
-        float      height
+        Animation*  animation,
+        TileMap*    tileMap,
+        GameCamera* camera
     );
+    void applyForces(const float* deltaTime) override;
     void move() override;
+    bool getGrounded() const;
 };
 
 #endif // HERO_H

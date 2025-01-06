@@ -4,23 +4,26 @@
 
 #ifndef MAP_H
 #define MAP_H
+#include "../camera/camera.h"
 #include "layerType.h"
 #include "raylib.h"
 #include <tmxlite/Map.hpp>
 
 class TileMap {
   private:
-    tmx::Map               map;
-    Texture2D*             textures;
-    float                  scaleX;
-    float                  scaleY;
+    tmx::Map   map;
+    Texture2D* textures;
+
+    float scaleX;
+    float scaleY;
+
     std::vector<Rectangle> grounds = {};
 
     void drawTile(
         const Texture2D& texture,
         unsigned         tileID,
-        unsigned         posX,
-        unsigned         posY,
+        float            posX,
+        float            posY,
         unsigned         tileWidth,
         unsigned         tileHeight,
         LayerType        layerType
@@ -28,12 +31,13 @@ class TileMap {
 
   public:
     explicit TileMap(
-        unsigned    screenWidth,
-        unsigned    screenHeight,
+        float       scaleX,
+        float       scaleY,
         const char* path
     );
     [[nodiscard]] std::vector<Rectangle> getGrounds() const;
-    void                                 draw();
+    void                                 draw(const GameCamera* camera);
+    Vector2                              getDimensions() const;
 };
 
 #endif // MAP_H

@@ -28,10 +28,9 @@ class Enemy final: public Object {
         Animation* animation,
         TileMap*   tileMap,
         ObjectType type,
-        float      width,
-        float      height,
         Vector2*   heroPosition
     );
+    void applyForces(const float* deltaTime) override;
     void move() override;
 };
 

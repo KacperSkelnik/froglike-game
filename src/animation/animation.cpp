@@ -95,8 +95,8 @@ void Animation::draw(
         rectangle,
         Vector2 {0, 0},
         0,
-        WHITE)
-    ;
+        WHITE
+    );
     // clang-format on
 }
 
