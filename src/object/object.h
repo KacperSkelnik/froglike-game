@@ -14,13 +14,7 @@ class Object {
   protected:
     ObjectType type;
 
-    float scaleX;
-    float scaleY;
-    float width  = 16 * scaleX;
-    float height = 16 * scaleY;
     float mass;
-
-    ObjectSide previousSide = NONE;
 
     Vector2 gravity = Gravity(mass).vector();
     Vector2 resultantForce {0, 0};
@@ -28,28 +22,15 @@ class Object {
 
     bool isGrounded = false;
 
-    Animation* animation;
-    TileMap*   tileMap;
-
-    void                    applyResistance();
-    void                    applyGravity();
-    virtual SpriteDef       getSprite() = 0;
-    [[nodiscard]] Rectangle getRectangle() const;
+    void applyResistance();
+    void applyGravity();
 
   public:
     explicit Object(
-        Animation* animation,
-        TileMap*   tileMap,
         ObjectType type,
-        float      scaleX,
-        float      scaleY,
         float      mass
     );
     virtual ~Object() = default;
-    Vector2 position {};
-
-    void draw();
-
     virtual void applyForces(const float* deltaTime) {};
     virtual void move() {};
 };

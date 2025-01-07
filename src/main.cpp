@@ -32,13 +32,13 @@ int main() {
             // enemies.emplace_back(&animation, &tileMap, FROG, &hero.position);
         }
 
-        // Hero updates
+        // Hero/Camera update
+        auto [mapWidth, mapHeight] = tileMap.getDimensions();
         hero.move();
         hero.applyForces(&deltaTime);
-        auto [mapWidth, mapHeight] = tileMap.getDimensions();
-        camera.updateCenter(mapWidth, mapHeight);
+        hero.updatePosition(mapWidth, mapHeight);
 
-        // Enemies updates
+        // Enemies update
         for (auto& enemy : enemies) {
             enemy.move();
             enemy.applyForces(&deltaTime);
@@ -46,6 +46,8 @@ int main() {
 
         BeginDrawing();
         {
+            DrawLine(0, screenHeight / 2, screenWidth, screenHeight / 2, BLACK);
+
             ClearBackground(RAYWHITE);
             tileMap.draw(&camera);
 

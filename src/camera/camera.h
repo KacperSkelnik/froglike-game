@@ -18,7 +18,7 @@ class GameCamera {
     Camera2D camera;
 
     explicit GameCamera();
-    void updateCenter(
+    void updateOffset(
         float mapWidth,
         float mapHeight
     );

@@ -37,7 +37,7 @@ void GameCamera::updateHorizontally(const float mapHeight) {
     }
 }
 
-void GameCamera::updateCenter(
+void GameCamera::updateOffset(
     const float mapWidth,
     const float mapHeight
 ) {

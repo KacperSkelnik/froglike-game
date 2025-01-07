@@ -10,18 +10,19 @@ Hero::Hero(
     TileMap*    tileMap,
     GameCamera* camera
 ):
-    Object(
+    Drawable(
         animation,
-        tileMap,
+        16 * 6,
+        16 * 6
+    ),
+    Object(
         ObjectType::HERO,
-        6,
-        6,
         3
     ),
     camera(camera),
     collisions(Collisions(tileMap)),
-    stepForce(12.0f),
-    jumpForce(-26.0f) {
+    stepForce(16.0f),
+    jumpForce(-70.0f) {
 
     this->gravity         = Gravity(mass).vector();
     this->position        = Vector2(GetScreenWidth() / 2, GetScreenHeight() - 9 * height);
@@ -107,10 +108,10 @@ void Hero::applyForces(const float* deltaTime) {
 
     // Walls push back
     if (_register.leftWall && _register.overlaps) {
-        resultantForce.x += Basic(_register.overlaps.value() / 1.8, 0).vector().x;
+        resultantForce.x += Basic(_register.overlaps.value(), 0).vector().x;
     }
     if (_register.rightWall && _register.overlaps) {
-        resultantForce.x += Basic(_register.overlaps.value() / 1.8, 180).vector().x;
+        resultantForce.x += Basic(_register.overlaps.value(), 180).vector().x;
     }
 
     // External forces
@@ -128,26 +129,26 @@ void Hero::applyForces(const float* deltaTime) {
     camera->camera.target.y += velocity.y * *deltaTime;
     velocity.y += accelerationY * *deltaTime * 0.5f;
 
-    // Fround and ceiling adjustments
+    // Ground and ceiling adjustments
     if (_register.ground && _register.groundY && velocity.y > 0) {
         velocity.y              = 0;
-        resultantForce.y        = 0;
-        camera->camera.target.y = _register.groundY.value();
+        camera->camera.target.y = _register.groundY.value() + (camera->camera.target.y - camera->camera.offset.y);
     }
     if (_register.ceiling && _register.ceilingY && velocity.y < 0) {
-        velocity.y              = 0;
-        resultantForce.y        = gravity.y;
-        camera->camera.target.y = _register.ceilingY.value() + height;
+        velocity.y       = 0;
+        resultantForce.y = gravity.y;
+        camera->camera.target.y = _register.ceilingY.value() + height + (camera->camera.target.y - camera->camera.offset.y);
     }
-
-    // Position update
-    position.x = camera->camera.offset.x - width;
-    position.y = camera->camera.offset.y - height;
 
     // don't remove!
     resultantForce.x = 0;
 }
 
-bool Hero::getGrounded() const {
-    return isGrounded;
+void Hero::updatePosition(
+    const float mapWidth,
+    const float mapHeight
+) {
+    camera->updateOffset(mapWidth, mapHeight);
+    position.x = camera->camera.offset.x - width;
+    position.y = camera->camera.offset.y - height;
 }

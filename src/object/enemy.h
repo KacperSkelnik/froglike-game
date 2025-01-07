@@ -5,16 +5,18 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 #include "../animation/animation.h"
+#include "drawable.h"
 #include "object.h"
 
-class Enemy final: public Object {
+class Enemy final: public Drawable, Object {
   private:
     int      frameCount = 0;
     float    stepForce;
     float    jumpForce;
     Vector2* heroPosition;
 
-    ObjectSide side = RIGHT;
+    ObjectSide previousSide = RIGHT;
+    ObjectSide side         = RIGHT;
 
     const int initialFramesToLand = 16;
     int       framesToLand        = 0;

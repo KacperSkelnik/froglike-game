@@ -12,12 +12,13 @@ Enemy::Enemy(
     const ObjectType type,
     Vector2*         heroPosition
 ):
-    Object(
+    Drawable(
         animation,
-        tileMap,
+        16 * 3,
+        16 * 3
+    ),
+    Object(
         type,
-        3,
-        3,
         2
     ),
     stepForce(2),

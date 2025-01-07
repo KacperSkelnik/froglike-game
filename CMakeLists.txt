@@ -67,6 +67,8 @@ add_executable(froglike_game src/main.cpp
         src/camera/Camera.h
         src/object/collisions.cpp
         src/object/collisions.h
+        src/object/drawable.cpp
+        src/object/drawable.h
 )
 
 # link all libraries to the project

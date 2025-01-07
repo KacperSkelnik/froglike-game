@@ -78,18 +78,18 @@ void TileMap::draw(const GameCamera* camera) {
     const auto screenWidth  = static_cast<float>(GetScreenWidth());
     const auto screenHeight = static_cast<float>(GetScreenHeight());
 
+    // apply only relevant part of the Tilemap
+    const float fromY = std::min(height, height + (camera->camera.target.y - camera->camera.offset.y) / tileHeight / scaleY);
+    const float toY   = std::max(0.f, fromY - 1 - screenHeight / tileHeight / scaleY);
+    const float fromX = std::max(0.f, (camera->camera.target.x - camera->camera.offset.x) / tileWidth / scaleX);
+    const float toX   = std::min(width, (camera->camera.target.x + screenWidth) / tileWidth / scaleX);
+
     for (const auto& layer : map.getLayers()) {
         // Render tile layers
         if (layer->getType() == tmx::Layer::Type::Tile) {
             const auto&     tileLayer = layer->getLayerAs<tmx::TileLayer>();
             const auto&     tiles     = tileLayer.getTiles();
             const LayerType layerType = fromString(tileLayer.getClass());
-
-            // apply only relevant part of the Tilemap
-            const float fromY = std::min(height, height + (camera->camera.target.y - camera->camera.offset.y) / tileHeight / scaleY);
-            const float toY   = std::max(0.f, fromY - 1 - screenHeight / tileHeight / scaleY);
-            const float fromX = std::max(0.f, (camera->camera.target.x - camera->camera.offset.x) / tileWidth / scaleX);
-            const float toX   = std::min(width, (camera->camera.target.x + screenWidth) / tileWidth / scaleX);
 
             // Iterate through the tiles within the layer's dimensions
             for (auto y = static_cast<unsigned>(fromY); y > static_cast<unsigned>(toY); y--) {

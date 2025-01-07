@@ -6,9 +6,10 @@
 #define HERO_H
 #include "../camera/camera.h"
 #include "collisions.h"
+#include "drawable.h"
 #include "object.h"
 
-class Hero final: public Object {
+class Hero final: public Drawable, Object {
   private:
     GameCamera* camera;
     Collisions  collisions;
@@ -35,8 +36,11 @@ class Hero final: public Object {
         GameCamera* camera
     );
     void applyForces(const float* deltaTime) override;
+    void updatePosition(
+        float mapWidth,
+        float mapHeight
+    );
     void move() override;
-    bool getGrounded() const;
 };
 
 #endif // HERO_H
