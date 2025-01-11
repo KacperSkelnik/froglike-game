@@ -5,11 +5,14 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 #include "../animation/animation.h"
+#include "../environment/tilemap.h"
 #include "drawable.h"
-#include "object.h"
+#include "movable.h"
 
-class Enemy final: public Drawable, Object {
+class Enemy final: public Drawable, Movable {
   private:
+    ObjectType type;
+
     int      frameCount = 0;
     float    stepForce;
     float    jumpForce;

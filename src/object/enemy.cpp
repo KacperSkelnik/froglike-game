@@ -17,13 +17,11 @@ Enemy::Enemy(
         16 * 3,
         16 * 3
     ),
-    Object(
-        type,
-        2
-    ),
+    Movable(2),
     stepForce(2),
     jumpForce(-30),
-    heroPosition(heroPosition) {
+    heroPosition(heroPosition),
+    type(type) {
 
     const auto initialX = static_cast<float>(GetRandomValue(static_cast<int>(width), static_cast<int>(GetScreenWidth() - width)));
     const float initialY = GetScreenHeight() - height;

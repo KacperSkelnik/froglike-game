@@ -54,8 +54,8 @@ class Collisions {
 
   public:
     explicit Collisions(TileMap* tileMap);
-    void               detect(Rectangle referenceRect);
-    CollisionsRegister getRegister() const;
+    void                             detect(Rectangle referenceRect);
+    [[nodiscard]] CollisionsRegister getRegister() const;
 };
 
 #endif // COLLISIONS_H

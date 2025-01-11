@@ -48,13 +48,17 @@ add_executable(froglike_game src/main.cpp
         src/object/hero.cpp
         src/object/enemy.cpp
         src/object/enemy.h
-        src/object/object.cpp
-        src/object/object.h
-        src/animation/animation.cpp
-        src/animation/animation.h
         src/object/status.h
         src/object/type.h
         src/object/side.h
+        src/object/collisions.cpp
+        src/object/collisions.h
+        src/object/drawable.cpp
+        src/object/drawable.h
+        src/object/movable.cpp
+        src/object/movable.h
+        src/animation/animation.cpp
+        src/animation/animation.h
         src/animation/sprite.h
         src/environment/tilemap.cpp
         src/environment/tilemap.h
@@ -63,12 +67,8 @@ add_executable(froglike_game src/main.cpp
         src/environment/time.h
         src/environment/background.cpp
         src/environment/background.h
-        src/camera/Camera.cpp
-        src/camera/Camera.h
-        src/object/collisions.cpp
-        src/object/collisions.h
-        src/object/drawable.cpp
-        src/object/drawable.h
+        src/camera/camera.cpp
+        src/camera/camera.h
 )
 
 # link all libraries to the project

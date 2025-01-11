@@ -24,8 +24,8 @@ class Drawable {
         float      width,
         float      height
     );
-    Rectangle getRectangle() const;
-    void      draw();
+    [[nodiscard]] Rectangle getRectangle() const;
+    void                    draw();
 };
 
 #endif // DRAWABLE_H

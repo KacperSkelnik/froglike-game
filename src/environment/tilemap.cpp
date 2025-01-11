@@ -109,7 +109,17 @@ void TileMap::draw(const GameCamera* camera) {
                         const float tileY = screenHeight - scaleY * (fromY - static_cast<float>(y)) * tileHeight;
 
                         // Draw the tile at the calculated position
-                        drawTile(textures[textureIndex], tile.ID - offset, tileX, tileY, tileWidth, tileHeight, layerType);
+                        // clang-format off
+                        drawTile(
+                            textures[textureIndex],
+                            tile.ID - offset,
+                            tileX,
+                            tileY,
+                            static_cast<unsigned>(tileWidth),
+                            static_cast<unsigned>(tileHeight),
+                            layerType
+                        );
+                        // clang-format on
                     }
                 }
             }

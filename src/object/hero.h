@@ -7,12 +7,14 @@
 #include "../camera/camera.h"
 #include "collisions.h"
 #include "drawable.h"
-#include "object.h"
+#include "movable.h"
 
-class Hero final: public Drawable, Object {
+class Hero final: public Drawable, Movable {
   private:
     GameCamera* camera;
     Collisions  collisions;
+
+    ObjectType type = HERO;
 
     float stepForce;
     float jumpForce;
@@ -24,7 +26,7 @@ class Hero final: public Drawable, Object {
     const int initialFramesToTurn = 8;
     int       framesToTurn        = 0;
 
-    ObjectSide previousSide = RIGHT;
+    ObjectSide previousSide = LEFT;
     ObjectSide side         = RIGHT;
 
     SpriteDef getSprite() override;

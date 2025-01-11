@@ -5,9 +5,9 @@
 #include "drawable.h"
 
 Drawable::Drawable(
-    Animation* animation,
-    float      width,
-    float      height
+    Animation*  animation,
+    const float width,
+    const float height
 ):
     animation(animation),
     width(width),

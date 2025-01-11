@@ -4,8 +4,6 @@
 
 #include "collisions.h"
 
-#include <iostream>
-
 Collisions::Collisions(TileMap* tileMap): tileMap(tileMap) {
     CollisionsRegister _register = CollisionsRegister();
     _register.reset();
