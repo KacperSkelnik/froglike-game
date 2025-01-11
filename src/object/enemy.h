@@ -6,17 +6,22 @@
 #define ENEMY_H
 #include "../animation/animation.h"
 #include "../environment/tilemap.h"
+#include "collisions.h"
 #include "drawable.h"
 #include "movable.h"
 
 class Enemy final: public Drawable, Movable {
   private:
+    GameCamera* camera;
+    Collisions  collisions;
+
     ObjectType type;
 
-    int      frameCount = 0;
-    float    stepForce;
-    float    jumpForce;
-    Vector2* heroPosition;
+    Vector2 mapPosition {};
+
+    int   frameCount = 0;
+    float stepForce;
+    float jumpForce;
 
     ObjectSide previousSide = RIGHT;
     ObjectSide side         = RIGHT;
@@ -27,16 +32,18 @@ class Enemy final: public Drawable, Movable {
     int       framesToTurn        = 0;
 
     SpriteDef getSprite() override;
+    bool      isOnTheScreen();
 
   public:
     Enemy(
-        Animation* animation,
-        TileMap*   tileMap,
-        ObjectType type,
-        Vector2*   heroPosition
+        ObjectType  type,
+        Animation*  animation,
+        TileMap*    tileMap,
+        GameCamera* camera
     );
     void applyForces(const float* deltaTime) override;
     void move() override;
+    void updatePosition();
 };
 
 #endif // ENEMY_H

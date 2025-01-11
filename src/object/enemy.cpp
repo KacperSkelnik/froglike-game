@@ -7,10 +7,10 @@
 #include "../force/force.h"
 #include <numbers>
 Enemy::Enemy(
+    const ObjectType type,
     Animation*       animation,
     TileMap*         tileMap,
-    const ObjectType type,
-    Vector2*         heroPosition
+    GameCamera*      camera
 ):
     Drawable(
         animation,
@@ -18,14 +18,15 @@ Enemy::Enemy(
         16 * 3
     ),
     Movable(2),
-    stepForce(2),
-    jumpForce(-30),
-    heroPosition(heroPosition),
-    type(type) {
+    camera(camera),
+    collisions(Collisions(tileMap)),
+    type(type),
+    stepForce(6),
+    jumpForce(-30) {
 
-    const auto initialX = static_cast<float>(GetRandomValue(static_cast<int>(width), static_cast<int>(GetScreenWidth() - width)));
-    const float initialY = GetScreenHeight() - height;
-    this->position       = Vector2(initialX, initialY);
+    const auto  initialX = static_cast<float>(GetScreenWidth()) / 2;
+    const float initialY = static_cast<float>(GetScreenHeight()) - 2 * height;
+    this->mapPosition    = Vector2(initialX, initialY);
 }
 
 void Enemy::move() {
@@ -33,8 +34,8 @@ void Enemy::move() {
     if (!isGrounded || frameCount % 100 == 0) {
         Vector2 force = {0, 0};
         if (isGrounded && framesToLand == 0 && framesToTurn == 0) {
-            const float dx    = position.x - heroPosition->x;
-            const float dy    = position.y - heroPosition->y;
+            const float dx    = mapPosition.x - camera->camera.target.x;
+            const float dy    = mapPosition.y - camera->camera.target.y;
             const float angle = 180 - static_cast<float>(atan2(dy, dx) * 180.0f / std::numbers::pi);
             if (90 < angle && angle <= 270) {
                 force = Basic(jumpForce, 45).vector();
@@ -64,7 +65,7 @@ SpriteDef Enemy::getSprite() {
             return SpriteDef {type, TURN, NONE};
         }
 
-        const float dx = position.x - heroPosition->x;
+        const float dx = mapPosition.x - camera->camera.target.x;
         if (dx <= 0) side = RIGHT;
         else side = LEFT;
         if (previousSide != side) {
@@ -81,20 +82,56 @@ SpriteDef Enemy::getSprite() {
     return SpriteDef {type, FALL, side};
 }
 
+bool Enemy::isOnTheScreen() {
+    return true;
+}
+
 void Enemy::applyForces(const float* deltaTime) {
-    applyGravity();
-    applyResistance();
+    if (isOnTheScreen()) {
+        // External forces
+        applyGravity();
+        applyResistance();
 
-    const float accelerationX = resultantForce.x / mass;
-    velocity.x += accelerationX * *deltaTime * 0.5f;
-    position.x += velocity.x * *deltaTime;
-    velocity.x += accelerationX * *deltaTime * 0.5f;
+        // Collisions
+        collisions.detect(getRectangle());
+        const CollisionsRegister _register = collisions.getRegister();
 
-    const float accelerationY = resultantForce.y / mass;
-    velocity.y += accelerationY * *deltaTime * 0.5f;
-    position.y += velocity.y * *deltaTime;
-    velocity.y += accelerationY * *deltaTime * 0.5f;
+        // Walls push back
+        if (_register.leftWall && _register.overlaps) {
+            resultantForce.x += Basic(_register.overlaps.value(), 0).vector().x;
+        }
+        if (_register.rightWall && _register.overlaps) {
+            resultantForce.x += Basic(_register.overlaps.value(), 180).vector().x;
+        }
 
-    // don't remove!
-    resultantForce.x = 0;
+        const float accelerationX = resultantForce.x / mass;
+        velocity.x += accelerationX * *deltaTime * 0.5f;
+        mapPosition.x += velocity.x * *deltaTime;
+        velocity.x += accelerationX * *deltaTime * 0.5f;
+
+        const float accelerationY = resultantForce.y / mass;
+        velocity.y += accelerationY * *deltaTime * 0.5f;
+        // Ground and ceiling adjustments
+        if (_register.ground && _register.groundY && velocity.y > 0) {
+            mapPosition.y = _register.groundY.value();
+            velocity.y    = 0;
+        } else if (_register.ceiling && _register.ceilingY && velocity.y < 0) {
+            mapPosition.y    = _register.ceilingY.value() + height;
+            velocity.y       = 0;
+            resultantForce.y = gravity.y;
+        } else {
+            mapPosition.y += velocity.y * *deltaTime;
+            velocity.y += accelerationY * *deltaTime * 0.5f;
+        }
+
+        isGrounded = _register.ground;
+
+        // don't remove!
+        resultantForce.x = 0;
+    }
+}
+
+void Enemy::updatePosition() {
+    position.x = camera->camera.offset.x + (mapPosition.x - camera->camera.target.x) - width;
+    position.y = camera->camera.offset.y + (mapPosition.y - camera->camera.target.y) - height;
 }

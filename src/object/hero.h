@@ -38,11 +38,12 @@ class Hero final: public Drawable, Movable {
         GameCamera* camera
     );
     void applyForces(const float* deltaTime) override;
+    void move() override;
     void updatePosition(
         float mapWidth,
         float mapHeight
     );
-    void move() override;
+    [[nodiscard]] Vector2 getPosition() const;
 };
 
 #endif // HERO_H

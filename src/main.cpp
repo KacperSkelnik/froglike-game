@@ -14,8 +14,9 @@ int main() {
 
     int frameCount = 0;
 
-    Time    time    = Time(60);
-    TileMap tileMap = TileMap(3, 3, "../assets/tilemap/example.tmx");
+    Time    time               = Time(60);
+    TileMap tileMap            = TileMap(3, 3, "../assets/tilemap/example.tmx");
+    auto [mapWidth, mapHeight] = tileMap.getDimensions();
 
     GameCamera         camera    = GameCamera();
     Animation          animation = Animation(&frameCount);
@@ -29,11 +30,10 @@ int main() {
         float deltaTime = time.deltaTime();
 
         if (enemies.empty()) {
-            // enemies.emplace_back(&animation, &tileMap, FROG, &hero.position);
+            enemies.emplace_back(FROG, &animation, &tileMap, &camera);
         }
 
         // Hero/Camera update
-        auto [mapWidth, mapHeight] = tileMap.getDimensions();
         hero.move();
         hero.applyForces(&deltaTime);
         hero.updatePosition(mapWidth, mapHeight);
@@ -42,6 +42,7 @@ int main() {
         for (auto& enemy : enemies) {
             enemy.move();
             enemy.applyForces(&deltaTime);
+            enemy.updatePosition();
         }
 
         BeginDrawing();

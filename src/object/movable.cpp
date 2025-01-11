@@ -15,4 +15,4 @@ void Movable::applyGravity() {
     if (!isGrounded) resultantForce.y = gravity.y;
 }
 
-Movable::Movable(float mass): mass(mass) {}
+Movable::Movable(const float mass): mass(mass) {}

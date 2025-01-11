@@ -21,7 +21,7 @@ Hero::Hero(
     stepForce(16.0f),
     jumpForce(-32.0f) {
 
-    this->position = Vector2(static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) - 9 * height);
+    this->position = Vector2(static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) - height);
     camera->camera.target = this->position;
 }
 
@@ -147,4 +147,8 @@ void Hero::updatePosition(
     camera->updateOffset(mapWidth, mapHeight);
     position.x = camera->camera.offset.x - width;
     position.y = camera->camera.offset.y - height;
+}
+
+Vector2 Hero::getPosition() const {
+    return position;
 }
