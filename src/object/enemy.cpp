@@ -30,27 +30,29 @@ Enemy::Enemy(
 }
 
 void Enemy::move() {
-    frameCount++;
-    if (!isGrounded || frameCount % 100 == 0) {
-        Vector2 force = {0, 0};
-        if (isGrounded && framesToLand == 0 && framesToTurn == 0) {
-            const float dx    = mapPosition.x - camera->camera.target.x;
-            const float dy    = mapPosition.y - camera->camera.target.y;
-            const float angle = 180 - static_cast<float>(atan2(dy, dx) * 180.0f / std::numbers::pi);
-            if (90 < angle && angle <= 270) {
-                force = Basic(jumpForce, 45).vector();
-            } else if ((270 <= angle && angle <= 360) || (0 < angle && angle <= 90)) {
-                force = Basic(jumpForce, 135).vector();
-            }
-        } else {
-            if (velocity.x < 0) {
-                force = Basic(stepForce, 180).vector();
+    if (isOnTheScreen()) {
+        frameCount++;
+        if (!isGrounded || frameCount % 100 == 0) {
+            Vector2 force = {0, 0};
+            if (isGrounded && framesToLand == 0 && framesToTurn == 0) {
+                const float dx    = mapPosition.x - camera->camera.target.x;
+                const float dy    = mapPosition.y - camera->camera.target.y;
+                const float angle = 180 - static_cast<float>(atan2(dy, dx) * 180.0f / std::numbers::pi);
+                if (90 < angle && angle <= 270) {
+                    force = Basic(jumpForce, 45).vector();
+                } else if ((270 <= angle && angle <= 360) || (0 < angle && angle <= 90)) {
+                    force = Basic(jumpForce, 135).vector();
+                }
             } else {
-                force = Basic(stepForce, 0).vector();
+                if (velocity.x < 0) {
+                    force = Basic(stepForce, 180).vector();
+                } else {
+                    force = Basic(stepForce, 0).vector();
+                }
             }
+            resultantForce.x += force.x;
+            resultantForce.y += force.y;
         }
-        resultantForce.x += force.x;
-        resultantForce.y += force.y;
     }
 }
 
@@ -82,7 +84,15 @@ SpriteDef Enemy::getSprite() {
     return SpriteDef {type, FALL, side};
 }
 
-bool Enemy::isOnTheScreen() {
+bool Enemy::isOnTheScreen() const {
+    if (camera->camera.target.x - camera->camera.offset.x > mapPosition.x ||
+        camera->camera.target.x - camera->camera.offset.x + static_cast<float>(GetScreenWidth()) < mapPosition.x)
+        return false;
+
+    if (camera->camera.target.y - camera->camera.offset.y > mapPosition.y ||
+        camera->camera.target.y - camera->camera.offset.y + static_cast<float>(GetScreenHeight()) < mapPosition.y)
+        return false;
+
     return true;
 }
 
@@ -132,6 +142,6 @@ void Enemy::applyForces(const float* deltaTime) {
 }
 
 void Enemy::updatePosition() {
-    position.x = camera->camera.offset.x + (mapPosition.x - camera->camera.target.x) - width;
-    position.y = camera->camera.offset.y + (mapPosition.y - camera->camera.target.y) - height;
+    position.x = mapPosition.x + (camera->camera.offset.x - camera->camera.target.x) - width / 2;
+    position.y = mapPosition.y + (camera->camera.offset.y - camera->camera.target.y) - height;
 }

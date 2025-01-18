@@ -32,7 +32,7 @@ class Enemy final: public Drawable, Movable {
     int       framesToTurn        = 0;
 
     SpriteDef getSprite() override;
-    bool      isOnTheScreen();
+    bool      isOnTheScreen() const;
 
   public:
     Enemy(

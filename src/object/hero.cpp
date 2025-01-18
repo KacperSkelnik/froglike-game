@@ -145,7 +145,7 @@ void Hero::updatePosition(
     const float mapHeight
 ) {
     camera->updateOffset(mapWidth, mapHeight);
-    position.x = camera->camera.offset.x - width;
+    position.x = camera->camera.offset.x - width / 2;
     position.y = camera->camera.offset.y - height;
 }
 
