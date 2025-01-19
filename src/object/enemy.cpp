@@ -89,8 +89,7 @@ bool Enemy::isOnTheScreen() const {
         camera->camera.target.x - camera->camera.offset.x + static_cast<float>(GetScreenWidth()) < mapPosition.x)
         return false;
 
-    if (camera->camera.target.y - camera->camera.offset.y > mapPosition.y ||
-        camera->camera.target.y - camera->camera.offset.y + static_cast<float>(GetScreenHeight()) < mapPosition.y)
+    if (camera->camera.target.y - camera->camera.offset.y + static_cast<float>(GetScreenHeight()) < mapPosition.y)
         return false;
 
     return true;
