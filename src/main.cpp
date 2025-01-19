@@ -47,8 +47,6 @@ int main() {
 
         BeginDrawing();
         {
-            DrawLine(0, screenHeight / 2, screenWidth, screenHeight / 2, BLACK);
-
             ClearBackground(RAYWHITE);
             tileMap.draw(&camera);
 
