@@ -7,8 +7,8 @@
 #include <vector>
 
 int main() {
-    constexpr int screenWidth  = 1280;
-    constexpr int screenHeight = 720;
+    constexpr int screenWidth  = 1920;
+    constexpr int screenHeight = 1080;
 
     InitWindow(screenWidth, screenHeight, "Froglike game");
 

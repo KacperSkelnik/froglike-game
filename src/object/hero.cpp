@@ -19,7 +19,7 @@ Hero::Hero(
     camera(camera),
     collisions(Collisions(tileMap)),
     stepForce(16.0f),
-    jumpForce(-32.0f) {
+    jumpForce(-28.0f) {
 
     this->position = Vector2(static_cast<float>(GetScreenWidth()) / 2, static_cast<float>(GetScreenHeight()) - height);
     camera->camera.target = this->position;
@@ -27,14 +27,17 @@ Hero::Hero(
 
 void Hero::move() {
     auto leftRightMovement = [](Hero* hero, const bool isGrounded) -> void {
+        float stepForce = hero->stepForce;
+        if (IsKeyDown(KEY_LEFT_SHIFT) && isGrounded) stepForce = 2 * stepForce;
+
         if (IsKeyDown(KEY_RIGHT)) {
-            auto [x, _] = Basic(hero->stepForce, 0).vector();
+            auto [x, _] = Basic(stepForce, 0).vector();
             hero->resultantForce.x += x;
             hero->side = RIGHT;
             if (isGrounded) hero->isWalking = true;
         }
         if (IsKeyDown(KEY_LEFT)) {
-            auto [x, _] = Basic(hero->stepForce, 180).vector();
+            auto [x, _] = Basic(stepForce, 180).vector();
             hero->resultantForce.x += x;
             hero->side = LEFT;
             if (isGrounded) hero->isWalking = true;
@@ -44,7 +47,7 @@ void Hero::move() {
     isWalking = false;
     if (isGrounded) {
         // jumping
-        if (IsKeyDown(KEY_UP)) {
+        if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_SPACE)) {
             auto [_, y] = Basic(jumpForce, 90).vector();
             resultantForce.y += y;
         }

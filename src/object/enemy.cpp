@@ -122,11 +122,11 @@ void Enemy::applyForces(const float* deltaTime) {
         velocity.y += accelerationY * *deltaTime * 0.5f;
         // Ground and ceiling adjustments
         if (_register.ground && _register.groundY && velocity.y > 0) {
-            mapPosition.y = _register.groundY.value();
+            mapPosition.y = _register.groundY.value() + (camera->camera.target.y - camera->camera.offset.y);
             velocity.y    = 0;
         } else if (_register.ceiling && _register.ceilingY && velocity.y < 0) {
-            mapPosition.y    = _register.ceilingY.value() + height;
-            velocity.y       = 0;
+            mapPosition.y = _register.ceilingY.value() + (camera->camera.target.y - camera->camera.offset.y) + height;
+            velocity.y    = 0;
             resultantForce.y = gravity.y;
         } else {
             mapPosition.y += velocity.y * *deltaTime;
